@@ -2,9 +2,9 @@
 
 namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
 
+use HardImpact\Waymaker\Get;
 use Illuminate\Routing\Controller;
 use Inertia\Response;
-use HardImpact\Waymaker\Get;
 
 class MethodDefaultsTestController extends Controller
 {

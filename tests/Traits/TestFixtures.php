@@ -2,8 +2,8 @@
 
 namespace HardImpact\Waymaker\Tests\Traits;
 
-use Illuminate\Support\Facades\File;
 use HardImpact\Waymaker\Waymaker;
+use Illuminate\Support\Facades\File;
 use Symfony\Component\Finder\Finder;
 
 trait TestFixtures

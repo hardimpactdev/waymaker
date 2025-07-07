@@ -2,11 +2,11 @@
 
 namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
 
-use Illuminate\Routing\Controller;
-use Inertia\Response;
 use HardImpact\Waymaker\Get;
 use HardImpact\Waymaker\Post;
 use HardImpact\Waymaker\Put;
+use Illuminate\Routing\Controller;
+use Inertia\Response;
 
 class MiddlewareTestController extends Controller
 {

@@ -2,13 +2,13 @@
 
 namespace HardImpact\Waymaker\Tests\Http\Controllers;
 
-use Illuminate\Routing\Controller;
-use Inertia\Response;
 use HardImpact\Waymaker\Delete;
 use HardImpact\Waymaker\Get;
 use HardImpact\Waymaker\Patch;
 use HardImpact\Waymaker\Post;
 use HardImpact\Waymaker\Put;
+use Illuminate\Routing\Controller;
+use Inertia\Response;
 
 class ArticleController extends Controller
 {
