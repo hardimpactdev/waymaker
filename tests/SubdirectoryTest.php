@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\File;
-use HardImpact\Waymaker\Waymaker;
 use HardImpact\Waymaker\Tests\Traits\TestFixtures;
+use HardImpact\Waymaker\Waymaker;
+use Illuminate\Support\Facades\File;
 
 uses(TestFixtures::class);
 

@@ -2,9 +2,9 @@
 
 namespace Tests\Fixtures\Controllers\Settings;
 
+use HardImpact\Waymaker\Get;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use HardImpact\Waymaker\Get;
 
 class ProfileController
 {

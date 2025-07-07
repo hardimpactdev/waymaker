@@ -2,8 +2,8 @@
 
 namespace HardImpact\Waymaker\Tests\Factories;
 
-use Illuminate\Support\Facades\File;
 use HardImpact\Waymaker\Enums\HttpMethod;
+use Illuminate\Support\Facades\File;
 
 class ControllerFactory
 {

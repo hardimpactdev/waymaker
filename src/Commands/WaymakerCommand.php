@@ -2,9 +2,9 @@
 
 namespace HardImpact\Waymaker\Commands;
 
+use HardImpact\Waymaker\Waymaker;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use HardImpact\Waymaker\Waymaker;
 
 class WaymakerCommand extends Command
 {

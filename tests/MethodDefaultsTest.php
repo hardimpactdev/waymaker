@@ -1,8 +1,8 @@
 <?php
 
 use HardImpact\Waymaker\Enums\HttpMethod;
-use HardImpact\Waymaker\Waymaker;
 use HardImpact\Waymaker\Tests\Traits\TestFixtures;
+use HardImpact\Waymaker\Waymaker;
 
 uses(TestFixtures::class);
 
