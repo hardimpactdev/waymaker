@@ -10,33 +10,6 @@ You can install the package via composer:
 composer require hardimpactdev/waymaker
 ```
 
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="waymaker-migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag="waymaker-config"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-    'method_defaults' => [
-        'GET' => ['index', 'show'],
-        'POST' => ['store'],
-        'PUT' => ['update'],
-        'DELETE' => ['destroy'],
-        'PATCH' => ['edit'],
-    ],
-];
-```
-
 ## Usage
 
 Update your vite config to include an additional run command:
