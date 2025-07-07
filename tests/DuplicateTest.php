@@ -1,12 +1,12 @@
 <?php
 
-use NckRtl\RouteMaker\RouteMaker;
+use HardImpact\Waymaker\Waymaker;
 
 test('it handles multiple methods with the same HTTP verb and URI', function () {
     // Create a test controller with both index and show methods
     $testControllerPath = __DIR__.'/TestDuplicateController.php';
     file_put_contents($testControllerPath, '<?php
-    namespace NckRtl\RouteMaker\Tests;
+    namespace HardImpact\Waymaker\Tests;
     
     use Illuminate\Routing\Controller;
     
@@ -26,19 +26,19 @@ test('it handles multiple methods with the same HTTP verb and URI', function () 
 
     try {
         // Temporarily set controller path to our test location
-        RouteMaker::setControllerPath(
+        Waymaker::setControllerPath(
             __DIR__,
-            'NckRtl\\RouteMaker\\Tests'
+            'HardImpact\\Waymaker\\Tests'
         );
 
-        $routes = RouteMaker::generateRouteDefinitions();
+        $routes = Waymaker::generateRouteDefinitions();
 
         // Convert routes to string for easier inspection
         $routesString = implode("\n", $routes);
 
         // Check if methods generate routes with different URIs
-        expect($routesString)->toContain("Route::get('/test-duplicate', [\\NckRtl\\RouteMaker\\Tests\\TestDuplicateController::class, 'index'])")
-            ->and($routesString)->toContain("Route::get('/test-duplicate/{id}', [\\NckRtl\\RouteMaker\\Tests\\TestDuplicateController::class, 'show'])")
+        expect($routesString)->toContain("Route::get('/test-duplicate', [\\HardImpact\\Waymaker\\Tests\\TestDuplicateController::class, 'index'])")
+            ->and($routesString)->toContain("Route::get('/test-duplicate/{id}', [\\HardImpact\\Waymaker\\Tests\\TestDuplicateController::class, 'show'])")
             ->and($routesString)->toContain('Controllers.TestDuplicateController.index')
             ->and($routesString)->toContain('Controllers.TestDuplicateController.show');
     } finally {

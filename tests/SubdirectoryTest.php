@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\File;
-use NckRtl\RouteMaker\RouteMaker;
-use NckRtl\RouteMaker\Tests\Traits\TestFixtures;
+use HardImpact\Waymaker\Waymaker;
+use HardImpact\Waymaker\Tests\Traits\TestFixtures;
 
 uses(TestFixtures::class);
 
@@ -23,9 +23,9 @@ test('it discovers controllers in subdirectories', function () {
     $homeControllerContent = <<<'PHP'
 <?php
 
-namespace NckRtl\RouteMaker\Tests\Http\Controllers\temp;
+namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
 
-use NckRtl\RouteMaker\Get;
+use HardImpact\Waymaker\Get;
 
 class HomeController
 {
@@ -43,10 +43,10 @@ PHP;
     $loginControllerContent = <<<'PHP'
 <?php
 
-namespace NckRtl\RouteMaker\Tests\Http\Controllers\temp\Auth;
+namespace HardImpact\Waymaker\Tests\Http\Controllers\temp\Auth;
 
-use NckRtl\RouteMaker\Get;
-use NckRtl\RouteMaker\Post;
+use HardImpact\Waymaker\Get;
+use HardImpact\Waymaker\Post;
 
 class LoginController
 {
@@ -66,9 +66,9 @@ PHP;
 
     file_put_contents($authPath.'/LoginController.php', $loginControllerContent);
 
-    $this->setupRouteMaker();
+    $this->setupWaymaker();
 
-    $routes = RouteMaker::generateRouteDefinitions();
+    $routes = Waymaker::generateRouteDefinitions();
     $routesString = implode("\n", $routes);
 
     // Check that both controllers are discovered
@@ -76,9 +76,9 @@ PHP;
     expect($routesString)->toContain('Auth\\LoginController');
 
     // Check specific routes (note: HomeController generates /home not / by default)
-    expect($routesString)->toContain("Route::get('/home', [\\NckRtl\\RouteMaker\\Tests\\Http\\Controllers\\temp\\HomeController::class, 'index'])");
-    expect($routesString)->toContain("Route::get('/login', [\\NckRtl\\RouteMaker\\Tests\\Http\\Controllers\\temp\\Auth\\LoginController::class, 'showLoginForm'])");
-    expect($routesString)->toContain("Route::post('/login', [\\NckRtl\\RouteMaker\\Tests\\Http\\Controllers\\temp\\Auth\\LoginController::class, 'login'])");
+    expect($routesString)->toContain("Route::get('/home', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\HomeController::class, 'index'])");
+    expect($routesString)->toContain("Route::get('/login', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\Auth\\LoginController::class, 'showLoginForm'])");
+    expect($routesString)->toContain("Route::post('/login', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\Auth\\LoginController::class, 'login'])");
 });
 
 test('it generates correct fully qualified class names for controllers in subdirectories', function () {
@@ -90,10 +90,10 @@ test('it generates correct fully qualified class names for controllers in subdir
     $profileControllerContent = <<<'PHP'
 <?php
 
-namespace NckRtl\RouteMaker\Tests\Http\Controllers\temp\Settings;
+namespace HardImpact\Waymaker\Tests\Http\Controllers\temp\Settings;
 
-use NckRtl\RouteMaker\Get;
-use NckRtl\RouteMaker\Put;
+use HardImpact\Waymaker\Get;
+use HardImpact\Waymaker\Put;
 
 class ProfileController
 {
@@ -115,9 +115,9 @@ PHP;
 
     file_put_contents($settingsPath.'/ProfileController.php', $profileControllerContent);
 
-    $this->setupRouteMaker();
+    $this->setupWaymaker();
 
-    $routes = RouteMaker::generateRouteDefinitions();
+    $routes = Waymaker::generateRouteDefinitions();
 
     // Find routes for the ProfileController
     $profileRoutes = array_filter($routes, function ($route) {
@@ -128,7 +128,7 @@ PHP;
 
     foreach ($profileRoutes as $route) {
         // Check that the fully qualified class name includes the subdirectory
-        expect($route)->toContain('\\NckRtl\\RouteMaker\\Tests\\Http\\Controllers\\temp\\Settings\\ProfileController');
+        expect($route)->toContain('\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\Settings\\ProfileController');
         // Check that middleware is applied
         expect($route)->toContain("->middleware('auth')");
     }
@@ -143,9 +143,9 @@ test('it handles deeply nested controller directories', function () {
     $revenueControllerContent = <<<'PHP'
 <?php
 
-namespace NckRtl\RouteMaker\Tests\Http\Controllers\temp\Admin\Reports\Financial;
+namespace HardImpact\Waymaker\Tests\Http\Controllers\temp\Admin\Reports\Financial;
 
-use NckRtl\RouteMaker\Get;
+use HardImpact\Waymaker\Get;
 
 class RevenueController
 {
@@ -162,15 +162,24 @@ class RevenueController
     {
         return 'monthly revenue';
     }
+    
+    #[Get(name: 'custom.revenue.show')]
+    public function show()
+    {
+        return 'show revenue';
+    }
 }
 PHP;
 
     file_put_contents($deepPath.'/RevenueController.php', $revenueControllerContent);
 
-    $this->setupRouteMaker();
+    $this->setupWaymaker();
 
-    $routes = RouteMaker::generateRouteDefinitions();
+    $routes = Waymaker::generateRouteDefinitions();
     $routesString = implode("\n", $routes);
+
+    // Debug: print the actual routes
+    // echo "\nGenerated routes:\n" . $routesString . "\n\n";
 
     // Check that the deeply nested controller is discovered
     expect($routesString)->toContain('Admin\\Reports\\Financial\\RevenueController');

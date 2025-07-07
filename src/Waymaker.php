@@ -1,35 +1,35 @@
 <?php
 
-namespace NckRtl\RouteMaker;
+namespace HardImpact\Waymaker;
 
+use HardImpact\Waymaker\Enums\HttpMethod;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use NckRtl\RouteMaker\Enums\HttpMethod;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
 use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 use Symfony\Component\Finder\Finder;
 
-class RouteMaker
+class Waymaker
 {
     private static ?string $controllerPath = null;
 
     private static ?string $controllerNamespace = null;
 
     /**
-     * Load routes from the route-maker.php file.
+     * Load routes from the waymaker.php file.
      */
     public static function routes(): void
     {
-        $routeFile = base_path('routes/route-maker.php');
+        $routeFile = base_path('routes/waymaker.php');
 
         if (file_exists($routeFile)) {
             try {
                 require $routeFile;
             } catch (\Throwable $e) {
-                Log::error("Failed to load route-maker.php: {$e->getMessage()}");
+                Log::error("Failed to load waymaker.php: {$e->getMessage()}");
             }
         }
     }
@@ -55,7 +55,7 @@ class RouteMaker
      */
     private static function getMethodDefault(string $methodName): ?HttpMethod
     {
-        $defaults = config('route-maker.method_defaults', []);
+        $defaults = config('waymaker.method_defaults', []);
 
         foreach ($defaults as $method => $methodNames) {
             if (in_array($methodName, $methodNames, true)) {
@@ -88,7 +88,7 @@ class RouteMaker
      */
     public static function generateRouteDefinitions(): array
     {
-        $cacheKey = 'route-maker.definitions';
+        $cacheKey = 'waymaker.definitions';
 
         // Skip caching in test environment
         if (app()->environment('production') && Cache::has($cacheKey)) {

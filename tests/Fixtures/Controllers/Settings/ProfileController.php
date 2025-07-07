@@ -4,7 +4,7 @@ namespace Tests\Fixtures\Controllers\Settings;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use NckRtl\RouteMaker\Get;
+use HardImpact\Waymaker\Get;
 
 class ProfileController
 {

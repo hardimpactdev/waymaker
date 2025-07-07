@@ -1,8 +1,8 @@
 <?php
 
-use NckRtl\RouteMaker\Route;
-use NckRtl\RouteMaker\RouteMaker;
-use NckRtl\RouteMaker\Tests\Traits\TestFixtures;
+use HardImpact\Waymaker\Route;
+use HardImpact\Waymaker\Waymaker;
+use HardImpact\Waymaker\Tests\Traits\TestFixtures;
 
 uses(TestFixtures::class);
 
@@ -11,7 +11,7 @@ uses(TestFixtures::class);
  */
 test('it correctly merges controller and method middleware', function () {
     // Create a reflection method to access the protected method
-    $reflectionClass = new ReflectionClass(RouteMaker::class);
+    $reflectionClass = new ReflectionClass(Waymaker::class);
     $processControllerMethodMethod = $reflectionClass->getMethod('processControllerMethod');
     $processControllerMethodMethod->setAccessible(true);
 
@@ -53,8 +53,8 @@ test('it correctly merges controller and method middleware', function () {
         ],
     ];
 
-    // Create a route maker instance
-    $routeMaker = new RouteMaker;
+    // Create a waymaker instance
+    $waymaker = new Waymaker;
 
     // Test each case
     foreach ($testCases as [$controllerMiddleware, $methodMiddleware, $expected]) {

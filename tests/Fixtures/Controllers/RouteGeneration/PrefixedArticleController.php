@@ -1,12 +1,12 @@
 <?php
 
-namespace NckRtl\RouteMaker\Tests\Http\Controllers\temp;
+namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
 
 use Illuminate\Routing\Controller;
 use Inertia\Response;
-use NckRtl\RouteMaker\Get;
+use HardImpact\Waymaker\Get;
 
-class ArticleController extends Controller
+class PrefixedArticleController extends Controller
 {
     protected static string $routePrefix = 'articles';
 

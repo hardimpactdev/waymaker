@@ -1,4 +1,4 @@
-# Route Maker
+# Waymaker
 
 This Laravel packages lets you generate a routes file based on your public controller methods. This package works particularly well with Laravel Wayfinder, as it allows you to reference controller methods instead of just routes. Based on the method signature in your controllers we could generate a routes file, automating route management entirely.
 
@@ -7,20 +7,20 @@ This Laravel packages lets you generate a routes file based on your public contr
 You can install the package via composer:
 
 ```bash
-composer require nckrtl/route-maker
+composer require hardimpactdev/waymaker
 ```
 
 You can publish and run the migrations with:
 
 ```bash
-php artisan vendor:publish --tag="route-maker-migrations"
+php artisan vendor:publish --tag="waymaker-migrations"
 php artisan migrate
 ```
 
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag="route-maker-config"
+php artisan vendor:publish --tag="waymaker-config"
 ```
 
 This is the contents of the published config file:
@@ -48,8 +48,8 @@ export default defineConfig({
     plugins: [
         run([
             {
-                name: "route-maker",
-                run: ["php", "artisan", "route-maker:make"],
+                name: "waymaker",
+                run: ["php", "artisan", "waymaker:make"],
                 pattern: ["app/**/Http/**/*.php"],
             },
         ]),
@@ -60,9 +60,9 @@ export default defineConfig({
 Next, update your main routes file to include the generated routes with:
 
 ```php
-use NckRtl\RouteMaker\Facades\RouteMaker;
+use HardImpact\Waymaker\Facades\Waymaker;
 
-RouteMaker::routes();
+Waymaker::routes();
 ```
 
 Now you're all set. Running vite dev should nog generate the routes based on your controller methods. On file change of any controller the routes file will be regenerated.
@@ -93,7 +93,7 @@ Route::get('/contact/{id}', [\App\Http\Controllers\ContactController::class, 'sh
 
 ### Smart URI Generation
 
-Route Maker intelligently generates URIs based on RESTful controller method conventions:
+Waymaker intelligently generates URIs based on RESTful controller method conventions:
 
 - `index()`, `create()`, `store()`: `/resource`
 - `show()`, `edit()`, `update()`, `destroy()`: `/resource/{id}`
@@ -106,7 +106,7 @@ This automatic URI generation prevents route conflicts when a controller has mul
 To influence the route that is being generated you can use specific HTTP method attributes. For example, you can define a route parameter like so:
 
 ```php
-use NckRtl\RouteMaker\Get;
+use HardImpact\Waymaker\Get;
 
 ...
 
@@ -121,7 +121,7 @@ public function show(Article $article): \Inertia\Response
 
 #### Available HTTP Method Attributes
 
-Route Maker provides specific attributes for each HTTP method:
+Waymaker provides specific attributes for each HTTP method:
 
 - `#[Get]` - For GET requests
 - `#[Post]` - For POST requests
@@ -138,7 +138,7 @@ Each attribute supports the following properties:
 #### Examples
 
 ```php
-use NckRtl\RouteMaker\{Get, Post, Put, Delete};
+use HardImpact\Waymaker\{Get, Post, Put, Delete};
 
 class ArticleController extends Controller
 {

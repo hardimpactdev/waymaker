@@ -1,9 +1,9 @@
 <?php
 
-namespace NckRtl\RouteMaker\Tests\Traits;
+namespace HardImpact\Waymaker\Tests\Traits;
 
 use Illuminate\Support\Facades\File;
-use NckRtl\RouteMaker\RouteMaker;
+use HardImpact\Waymaker\Waymaker;
 use Symfony\Component\Finder\Finder;
 
 trait TestFixtures
@@ -66,13 +66,13 @@ trait TestFixtures
     }
 
     /**
-     * Set up the RouteMaker to use the temp path.
+     * Set up the Waymaker to use the temp path.
      */
-    protected function setupRouteMaker(): void
+    protected function setupWaymaker(): void
     {
-        RouteMaker::setControllerPath(
+        Waymaker::setControllerPath(
             $this->tempPath,
-            'NckRtl\\RouteMaker\\Tests\\Http\\Controllers\\temp'
+            'HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp'
         );
     }
 

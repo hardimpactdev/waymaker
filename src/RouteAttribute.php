@@ -1,8 +1,8 @@
 <?php
 
-namespace NckRtl\RouteMaker;
+namespace HardImpact\Waymaker;
 
-use NckRtl\RouteMaker\Enums\HttpMethod;
+use HardImpact\Waymaker\Enums\HttpMethod;
 
 abstract class RouteAttribute
 {

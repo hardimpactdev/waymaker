@@ -1,6 +1,6 @@
 <?php
 
-// config for NckRtl/RouteMaker
+// config for HardImpact/Waymaker
 return [
     'method_defaults' => [
         'GET' => ['index', 'show'],

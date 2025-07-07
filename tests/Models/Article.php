@@ -1,6 +1,6 @@
 <?php
 
-namespace NckRtl\RouteMaker\Tests\Models;
+namespace HardImpact\Waymaker\Tests\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

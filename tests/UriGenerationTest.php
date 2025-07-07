@@ -1,16 +1,16 @@
 <?php
 
-use NckRtl\RouteMaker\RouteMaker;
-use NckRtl\RouteMaker\Tests\Traits\TestFixtures;
+use HardImpact\Waymaker\Waymaker;
+use HardImpact\Waymaker\Tests\Traits\TestFixtures;
 
 uses(TestFixtures::class);
 
 /**
- * Test the URI generation logic in RouteMaker.
+ * Test the URI generation logic in Waymaker.
  */
 test('it correctly generates URIs for different scenarios', function () {
     // Create a reflection method to access the protected method
-    $reflectionClass = new ReflectionClass(RouteMaker::class);
+    $reflectionClass = new ReflectionClass(Waymaker::class);
     $generateUriMethod = $reflectionClass->getMethod('generateUri');
     $generateUriMethod->setAccessible(true);
 
@@ -37,8 +37,8 @@ test('it correctly generates URIs for different scenarios', function () {
         [null, '/', null, 'UserController', 'index', '/'],
     ];
 
-    // Create a RouteMaker instance
-    $routeMaker = new RouteMaker;
+    // Create a Waymaker instance
+    $waymaker = new Waymaker;
 
     // Test each case
     foreach ($testCases as [$prefix, $customUri, $parameters, $controllerName, $methodName, $expected]) {

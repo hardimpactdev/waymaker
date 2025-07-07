@@ -1,17 +1,17 @@
 {
-    "name": "nckrtl/route-maker",
-    "description": "This is my package route-maker",
+    "name": "hardimpactdev/waymaker",
+    "description": "This is my package waymaker",
     "keywords": [
-        "NckRtl",
+        "HardImpact",
         "laravel",
-        "route-maker"
+        "waymaker"
     ],
-    "homepage": "https://github.com/nckrtl/route-maker",
+    "homepage": "https://github.com/hardimpactdev/waymaker",
     "license": "MIT",
     "authors": [
         {
-            "name": "nckrtl",
-            "email": "nick.retel@gmail.com",
+            "name": "HardImpact",
+            "email": "dev@hardimpact.com",
             "role": "Developer"
         }
     ],
@@ -35,13 +35,13 @@
     },
     "autoload": {
         "psr-4": {
-            "NckRtl\\RouteMaker\\": "src/",
-            "NckRtl\\RouteMaker\\Database\\Factories\\": "database/factories/"
+            "HardImpact\\Waymaker\\": "src/",
+            "HardImpact\\Waymaker\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "NckRtl\\RouteMaker\\Tests\\": "tests/",
+            "HardImpact\\Waymaker\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
@@ -63,10 +63,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "NckRtl\\RouteMaker\\RouteMakerServiceProvider"
+                "HardImpact\\Waymaker\\WaymakerServiceProvider"
             ],
             "aliases": {
-                "RouteMaker": "NckRtl\\RouteMaker\\Facades\\RouteMaker"
+                "Waymaker": "HardImpact\\Waymaker\\Facades\\Waymaker"
             }
         }
     },

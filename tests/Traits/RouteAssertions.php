@@ -1,8 +1,8 @@
 <?php
 
-namespace NckRtl\RouteMaker\Tests\Traits;
+namespace HardImpact\Waymaker\Tests\Traits;
 
-use NckRtl\RouteMaker\RouteMaker;
+use HardImpact\Waymaker\Waymaker;
 
 trait RouteAssertions
 {
@@ -11,7 +11,7 @@ trait RouteAssertions
      */
     protected function getTestNamespace(): string
     {
-        return 'NckRtl\\RouteMaker\\Tests\\Http\\Controllers\\temp';
+        return 'HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp';
     }
 
     /**
@@ -25,7 +25,7 @@ trait RouteAssertions
         ?string $name = null,
         ?array $middleware = null
     ): void {
-        $routes = RouteMaker::generateRouteDefinitions();
+        $routes = Waymaker::generateRouteDefinitions();
         $routeName = $name ?? "Controllers.{$controller}.{$action}";
 
         // Build the expected route pattern
@@ -87,6 +87,6 @@ trait RouteAssertions
      */
     protected function getGeneratedRoutes(): array
     {
-        return RouteMaker::generateRouteDefinitions();
+        return Waymaker::generateRouteDefinitions();
     }
 }

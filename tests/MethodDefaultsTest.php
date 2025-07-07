@@ -1,8 +1,8 @@
 <?php
 
-use NckRtl\RouteMaker\Enums\HttpMethod;
-use NckRtl\RouteMaker\RouteMaker;
-use NckRtl\RouteMaker\Tests\Traits\TestFixtures;
+use HardImpact\Waymaker\Enums\HttpMethod;
+use HardImpact\Waymaker\Waymaker;
+use HardImpact\Waymaker\Tests\Traits\TestFixtures;
 
 uses(TestFixtures::class);
 
@@ -11,12 +11,12 @@ uses(TestFixtures::class);
  */
 test('it applies correct HTTP method defaults based on method names', function () {
     // Create a reflection method to access the protected getMethodDefault method
-    $reflectionClass = new ReflectionClass(RouteMaker::class);
+    $reflectionClass = new ReflectionClass(Waymaker::class);
     $getMethodDefaultMethod = $reflectionClass->getMethod('getMethodDefault');
     $getMethodDefaultMethod->setAccessible(true);
 
     // Set up configurations for the test
-    config(['route-maker.method_defaults' => [
+    config(['waymaker.method_defaults' => [
         'GET' => ['index', 'show'],
         'POST' => ['store'],
         'PUT' => ['update'],
@@ -24,8 +24,8 @@ test('it applies correct HTTP method defaults based on method names', function (
         'PATCH' => ['edit'],
     ]]);
 
-    // Create an instance of RouteMaker to invoke the method
-    $routeMaker = new RouteMaker;
+    // Create an instance of Waymaker to invoke the method
+    $waymaker = new Waymaker;
 
     // Test each method name default
     $methodDefaults = [

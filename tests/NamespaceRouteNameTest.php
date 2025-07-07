@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\File;
-use NckRtl\RouteMaker\RouteMaker;
-use NckRtl\RouteMaker\Tests\Traits\TestFixtures;
+use HardImpact\Waymaker\Waymaker;
+use HardImpact\Waymaker\Tests\Traits\TestFixtures;
 
 uses(TestFixtures::class);
 
@@ -23,9 +23,9 @@ it('generates route names with full namespace path for nested controllers', func
     $profileControllerContent = <<<'PHP'
 <?php
 
-namespace NckRtl\RouteMaker\Tests\Http\Controllers\temp\Settings;
+namespace HardImpact\Waymaker\Tests\Http\Controllers\temp\Settings;
 
-use NckRtl\RouteMaker\Get;
+use HardImpact\Waymaker\Get;
 
 class ProfileController
 {
@@ -39,9 +39,9 @@ PHP;
 
     file_put_contents($settingsPath.'/ProfileController.php', $profileControllerContent);
 
-    $this->setupRouteMaker();
+    $this->setupWaymaker();
 
-    $routes = RouteMaker::generateRouteDefinitions();
+    $routes = Waymaker::generateRouteDefinitions();
 
     // Find the route for the ProfileController edit method
     $profileRoute = null;
@@ -67,9 +67,9 @@ it('generates route names with deeply nested namespace paths', function () {
     $revenueControllerContent = <<<'PHP'
 <?php
 
-namespace NckRtl\RouteMaker\Tests\Http\Controllers\temp\Admin\Reports\Financial;
+namespace HardImpact\Waymaker\Tests\Http\Controllers\temp\Admin\Reports\Financial;
 
-use NckRtl\RouteMaker\Get;
+use HardImpact\Waymaker\Get;
 
 class RevenueController
 {
@@ -89,9 +89,9 @@ PHP;
 
     file_put_contents($deepPath.'/RevenueController.php', $revenueControllerContent);
 
-    $this->setupRouteMaker();
+    $this->setupWaymaker();
 
-    $routes = RouteMaker::generateRouteDefinitions();
+    $routes = Waymaker::generateRouteDefinitions();
 
     // Find the routes for the RevenueController
     $indexRoute = null;

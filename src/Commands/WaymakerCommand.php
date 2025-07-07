@@ -1,20 +1,20 @@
 <?php
 
-namespace NckRtl\RouteMaker\Commands;
+namespace HardImpact\Waymaker\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use NckRtl\RouteMaker\RouteMaker;
+use HardImpact\Waymaker\Waymaker;
 
-class RouteMakerCommand extends Command
+class WaymakerCommand extends Command
 {
-    public $signature = 'route-maker:make';
+    public $signature = 'waymaker:make';
 
     public $description = 'Generate routes for the application';
 
     public function handle(): int
     {
-        $filePath = base_path('routes/route-maker.php');
+        $filePath = base_path('routes/waymaker.php');
 
         // Ensure the routes directory exists
         if (! File::exists(dirname($filePath))) {
@@ -22,7 +22,7 @@ class RouteMakerCommand extends Command
         }
 
         // Generate routes
-        $routes = RouteMaker::generateRouteDefinitions();
+        $routes = Waymaker::generateRouteDefinitions();
 
         // Compose the full file content with opening tag + use statement
         $content = "<?php\n\nuse Illuminate\Support\Facades\Route;\n\n".implode("\n", $routes)."\n";
@@ -30,7 +30,7 @@ class RouteMakerCommand extends Command
         // Save the file
         File::put($filePath, $content);
 
-        $this->info('Wayfinder routes dumped successfully to routes/route-maker.php');
+        $this->info('Waymaker routes dumped successfully to routes/waymaker.php');
 
         return self::SUCCESS;
     }

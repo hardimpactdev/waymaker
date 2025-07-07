@@ -1,7 +1,7 @@
 <?php
 
-use NckRtl\RouteMaker\RouteMaker;
-use NckRtl\RouteMaker\Tests\Traits\TestFixtures;
+use HardImpact\Waymaker\Waymaker;
+use HardImpact\Waymaker\Tests\Traits\TestFixtures;
 
 uses(TestFixtures::class);
 
@@ -18,18 +18,18 @@ afterEach(function () {
  */
 test('it generates correct route definitions from controllers', function () {
     // Use the permanent fixture for this test
-    RouteMaker::setControllerPath(
+    Waymaker::setControllerPath(
         __DIR__.'/Http/Controllers',
-        'NckRtl\\RouteMaker\\Tests\\Http\\Controllers'
+        'HardImpact\\Waymaker\\Tests\\Http\\Controllers'
     );
 
-    $routes = RouteMaker::generateRouteDefinitions();
+    $routes = Waymaker::generateRouteDefinitions();
 
-    $expectedGetRoute = "Route::get('/articles/{article:slug}', [\\NckRtl\\RouteMaker\\Tests\\Http\\Controllers\\ArticleController::class, 'show'])->name('Controllers.ArticleController.show')->middleware(['auth', 'verified']);";
-    $expectedPostRoute = "Route::post('/articles', [\\NckRtl\\RouteMaker\\Tests\\Http\\Controllers\\ArticleController::class, 'store'])->name('Controllers.ArticleController.store')->middleware(['auth', 'verified']);";
-    $expectedPutRoute = "Route::put('/articles/{article:slug}', [\\NckRtl\\RouteMaker\\Tests\\Http\\Controllers\\ArticleController::class, 'update'])->name('Controllers.ArticleController.update')->middleware(['auth', 'verified']);";
-    $expectedPatchRoute = "Route::patch('/articles/{article:slug}', [\\NckRtl\\RouteMaker\\Tests\\Http\\Controllers\\ArticleController::class, 'edit'])->name('Controllers.ArticleController.edit')->middleware(['auth', 'verified']);";
-    $expectedDeleteRoute = "Route::delete('/articles/{article:slug}', [\\NckRtl\\RouteMaker\\Tests\\Http\\Controllers\\ArticleController::class, 'destroy'])->name('Controllers.ArticleController.destroy')->middleware(['auth', 'verified']);";
+    $expectedGetRoute = "Route::get('/articles/{article:slug}', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\ArticleController::class, 'show'])->name('Controllers.ArticleController.show')->middleware(['auth', 'verified']);";
+    $expectedPostRoute = "Route::post('/articles', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\ArticleController::class, 'store'])->name('Controllers.ArticleController.store')->middleware(['auth', 'verified']);";
+    $expectedPutRoute = "Route::put('/articles/{article:slug}', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\ArticleController::class, 'update'])->name('Controllers.ArticleController.update')->middleware(['auth', 'verified']);";
+    $expectedPatchRoute = "Route::patch('/articles/{article:slug}', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\ArticleController::class, 'edit'])->name('Controllers.ArticleController.edit')->middleware(['auth', 'verified']);";
+    $expectedDeleteRoute = "Route::delete('/articles/{article:slug}', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\ArticleController::class, 'destroy'])->name('Controllers.ArticleController.destroy')->middleware(['auth', 'verified']);";
 
     expect($routes)->toContain($expectedGetRoute);
     expect($routes)->toContain($expectedPostRoute);
@@ -43,7 +43,7 @@ test('it generates correct route definitions from controllers', function () {
  */
 test('it correctly groups routes by prefix', function () {
     // Get reflection method for testing
-    $reflectionClass = new ReflectionClass(RouteMaker::class);
+    $reflectionClass = new ReflectionClass(Waymaker::class);
     $flattenMethod = $reflectionClass->getMethod('flattenGroupedRoutes');
     $flattenMethod->setAccessible(true);
 

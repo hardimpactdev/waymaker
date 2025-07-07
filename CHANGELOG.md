@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to `route-maker` will be documented in this file.
+All notable changes to `waymaker` will be documented in this file.
 
 ## v0.3.1 - 2025-01-06
 

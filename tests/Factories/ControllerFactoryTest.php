@@ -1,8 +1,8 @@
 <?php
 
-use NckRtl\RouteMaker\Enums\HttpMethod;
-use NckRtl\RouteMaker\Tests\Factories\ControllerFactory;
-use NckRtl\RouteMaker\Tests\Traits\TestFixtures;
+use HardImpact\Waymaker\Enums\HttpMethod;
+use HardImpact\Waymaker\Tests\Factories\ControllerFactory;
+use HardImpact\Waymaker\Tests\Traits\TestFixtures;
 
 uses(TestFixtures::class);
 
@@ -23,7 +23,7 @@ test('it can generate controllers dynamically for testing', function () {
     $code = $factory->generate();
 
     // Check namespace and class structure
-    expect($code)->toMatch('/namespace NckRtl\\\\RouteMaker\\\\Tests\\\\Http\\\\Controllers\\\\temp;/');
+    expect($code)->toMatch('/namespace HardImpact\\\\Waymaker\\\\Tests\\\\Http\\\\Controllers\\\\temp;/');
     expect($code)->toMatch('/class DynamicController extends Controller/');
 
     // Check controller properties

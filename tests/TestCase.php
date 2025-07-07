@@ -1,9 +1,9 @@
 <?php
 
-namespace NckRtl\RouteMaker\Tests;
+namespace HardImpact\Waymaker\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use NckRtl\RouteMaker\RouteMakerServiceProvider;
+use HardImpact\Waymaker\WaymakerServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
@@ -13,14 +13,14 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'NckRtl\\RouteMaker\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'HardImpact\\Waymaker\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 
     protected function getPackageProviders($app)
     {
         return [
-            RouteMakerServiceProvider::class,
+            WaymakerServiceProvider::class,
         ];
     }
 
@@ -44,7 +44,7 @@ class TestCase extends Orchestra
         });
 
         // Override the app namespace
-        $app['config']->set('app.namespace', 'NckRtl\\RouteMaker\\Tests');
+        $app['config']->set('app.namespace', 'HardImpact\\Waymaker\\Tests');
 
         // Override the app_path helper function globally
         $app->bind('app_path', function () {

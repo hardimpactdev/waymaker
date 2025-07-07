@@ -1,8 +1,8 @@
 <?php
 
-namespace NckRtl\RouteMaker\Tests\Controllers;
+namespace HardImpact\Waymaker\Tests\Controllers;
 
-use NckRtl\RouteMaker\RouteMaker;
+use HardImpact\Waymaker\Waymaker;
 
 /**
  * This class serves as a registry for test controllers.
@@ -21,9 +21,9 @@ class TestControllerRegistry
         $path = __DIR__.'/../Fixtures/Controllers/'.$fixtureType;
 
         // Register the controller path
-        RouteMaker::setControllerPath(
+        Waymaker::setControllerPath(
             $path,
-            'NckRtl\\RouteMaker\\Tests\\Http\\Controllers\\temp'
+            'HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp'
         );
     }
 

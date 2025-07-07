@@ -1,12 +1,12 @@
 <?php
 
-namespace NckRtl\RouteMaker\Tests\Http\Controllers\temp;
+namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
 
 use Illuminate\Routing\Controller;
 use Inertia\Response;
-use NckRtl\RouteMaker\Get;
-use NckRtl\RouteMaker\Post;
-use NckRtl\RouteMaker\Put;
+use HardImpact\Waymaker\Get;
+use HardImpact\Waymaker\Post;
+use HardImpact\Waymaker\Put;
 
 class MiddlewareTestController extends Controller
 {

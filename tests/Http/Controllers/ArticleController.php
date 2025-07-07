@@ -1,14 +1,14 @@
 <?php
 
-namespace NckRtl\RouteMaker\Tests\Http\Controllers;
+namespace HardImpact\Waymaker\Tests\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use Inertia\Response;
-use NckRtl\RouteMaker\Delete;
-use NckRtl\RouteMaker\Get;
-use NckRtl\RouteMaker\Patch;
-use NckRtl\RouteMaker\Post;
-use NckRtl\RouteMaker\Put;
+use HardImpact\Waymaker\Delete;
+use HardImpact\Waymaker\Get;
+use HardImpact\Waymaker\Patch;
+use HardImpact\Waymaker\Post;
+use HardImpact\Waymaker\Put;
 
 class ArticleController extends Controller
 {
