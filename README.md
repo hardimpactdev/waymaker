@@ -22,7 +22,7 @@ export default defineConfig({
         run([
             {
                 name: "waymaker",
-                run: ["php", "artisan", "waymaker:make"],
+                run: ["php", "artisan", "waymaker:generate"],
                 pattern: ["app/**/Http/**/*.php"],
             },
         ]),
@@ -42,15 +42,22 @@ Now you're all set. Running vite dev should nog generate the routes based on you
 
 ### Route definition structure
 
-The way routes are generated are pretty opionated. The naming convention of routes is inspired by how Laravel Wayfinder exposes routes/actions. For this controller:
+The way routes are generated are pretty opionated. The naming convention of routes is inspired by how Laravel Wayfinder exposes routes/actions.
+
+**Important:** As of version 2.0, explicit route attributes are required on all controller methods that should generate routes. Methods without route attributes will be ignored.
+
+For this controller:
 
 ```php
 <?php
 
 namespace App\Http\Controllers;
 
+use HardImpact\Waymaker\Get;
+
 class ContactController extends Controller
 {
+    #[Get(uri: '{id}')]
     public function show(): \Inertia\Response
     {
         return inertia('Contact');
@@ -61,22 +68,34 @@ class ContactController extends Controller
 The generated route definition will look like:
 
 ```php
-Route::get('/contact/{id}', [\App\Http\Controllers\ContactController::class, 'show'])->name('Controllers.ContactController.show');
+Route::prefix('contact')->group(function () {
+    Route::get('{id}', [\App\Http\Controllers\ContactController::class, 'show'])->name('Controllers.ContactController.show');
+});
 ```
+
+### Smart Route Grouping
+
+Waymaker intelligently groups routes to reduce duplication and improve readability:
+
+- Routes with the same prefix and middleware are automatically grouped
+- Prefixes and middleware are applied at the group level
+- Individual routes within groups use relative URIs (no leading slash)
+- Route-specific middleware is still applied to individual routes
 
 ### Smart URI Generation
 
-Waymaker intelligently generates URIs based on RESTful controller method conventions:
+Waymaker intelligently generates URIs based on your controller structure:
 
-- `index()`, `create()`, `store()`: `/resource`
-- `show()`, `edit()`, `update()`, `destroy()`: `/resource/{id}`
-- Other custom methods: `/resource/method-name`
+- Controller name becomes the base URI (e.g., `ArticleController` → `/article`)
+- Route prefixes are applied to all routes in the controller
+- Custom URIs in attributes are appended to the base/prefix
+- Route parameters can be specified in the attribute
 
-This automatic URI generation prevents route conflicts when a controller has multiple methods with the same HTTP verb.
+This automatic URI generation helps maintain consistent URL structures across your application.
 
-### Setting route parameters and other properties.
+### Setting route parameters and other properties
 
-To influence the route that is being generated you can use specific HTTP method attributes. For example, you can define a route parameter like so:
+**Route attributes are required** for all controller methods that should generate routes. You can use specific HTTP method attributes to define routes. For example, you can define a route parameter like so:
 
 ```php
 use HardImpact\Waymaker\Get;
@@ -103,10 +122,12 @@ Waymaker provides specific attributes for each HTTP method:
 - `#[Delete]` - For DELETE requests
 
 Each attribute supports the following properties:
-- `uri` - Custom URI path (optional)
+- `uri` - Custom URI path (optional, appended to base/prefix)
 - `name` - Custom route name (optional)
 - `parameters` - Route parameters array (optional)
 - `middleware` - Route-specific middleware (optional)
+
+**Note:** Methods without a route attribute will not generate any routes.
 
 #### Examples
 

@@ -71,14 +71,17 @@ PHP;
     $routes = Waymaker::generateRouteDefinitions();
     $routesString = implode("\n", $routes);
 
+    // Debug
+    // echo "\nGenerated routes:\n" . $routesString . "\n\n";
+
     // Check that both controllers are discovered
     expect($routesString)->toContain('HomeController');
     expect($routesString)->toContain('Auth\\LoginController');
 
     // Check specific routes (note: HomeController generates /home not / by default)
     expect($routesString)->toContain("Route::get('/home', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\HomeController::class, 'index'])");
-    expect($routesString)->toContain("Route::get('/login', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\Auth\\LoginController::class, 'showLoginForm'])");
-    expect($routesString)->toContain("Route::post('/login', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\Auth\\LoginController::class, 'login'])");
+    expect($routesString)->toContain("Route::get('/login/login', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\Auth\\LoginController::class, 'showLoginForm'])");
+    expect($routesString)->toContain("Route::post('/login/login', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\Auth\\LoginController::class, 'login'])");
 });
 
 test('it generates correct fully qualified class names for controllers in subdirectories', function () {
@@ -184,5 +187,5 @@ PHP;
     // Check that the deeply nested controller is discovered
     expect($routesString)->toContain('Admin\\Reports\\Financial\\RevenueController');
     expect($routesString)->toContain('/admin/reports/financial/revenue');
-    expect($routesString)->toContain("Route::get('/monthly'");
+    expect($routesString)->toContain("Route::get('/admin/reports/financial/revenue/monthly'");
 });

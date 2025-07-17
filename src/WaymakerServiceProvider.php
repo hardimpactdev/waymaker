@@ -17,7 +17,6 @@ class WaymakerServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('waymaker')
-            ->hasConfigFile()
             ->hasViews()
             ->hasMigration('create_wayfinder_routes_table')
             ->hasCommand(WaymakerCommand::class);

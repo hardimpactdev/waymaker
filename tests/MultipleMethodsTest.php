@@ -16,18 +16,21 @@ namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
 
 use Illuminate\Routing\Controller;
 use Inertia\Response;
+use HardImpact\Waymaker\Get;
 use HardImpact\Waymaker\Post;
 use HardImpact\Waymaker\Enums\HttpMethod;
 
 class MultiMethodController extends Controller
 {
     // First method
+    #[Get]
     public function index(): Response
     {
         return inertia('Test/Index');
     }
 
     // Second method
+    #[Get(uri: '{id}')]
     public function show(): Response
     {
         return inertia('Test/Show');
@@ -69,12 +72,10 @@ test('it generates routes for controllers with multiple methods', function () {
     $namespace = 'HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp';
 
     $expectedRoutes = [
-        // Group header
-        '// /',
         // Route definitions
-        "Route::get('/multi-method', [\\{$namespace}\\MultiMethodController::class, 'index'])->name('Controllers.MultiMethodController.index');",
-        "Route::get('/multi-method/{id}', [\\{$namespace}\\MultiMethodController::class, 'show'])->name('Controllers.MultiMethodController.show');",
-        "Route::post('/multi-method', [\\{$namespace}\\MultiMethodController::class, 'store'])->name('Controllers.MultiMethodController.store');",
+        "Route::get('/multi-method', [\\{$namespace}\\MultiMethodController::class, 'index'])->name('MultiMethodController.index');",
+        "Route::post('/multi-method', [\\{$namespace}\\MultiMethodController::class, 'store'])->name('MultiMethodController.store');",
+        "Route::get('/multi-method/{id}', [\\{$namespace}\\MultiMethodController::class, 'show'])->name('MultiMethodController.show');",
     ];
 
     // Check each expected route definition
@@ -83,12 +84,10 @@ test('it generates routes for controllers with multiple methods', function () {
     }
 
     // Make sure we have the correct number of elements in the routes array
-    expect(count($routes))->toBe(4);
+    expect(count($routes))->toBe(3);
 
-    // Verify specific routes have the correct URIs
-    expect($routes[1])->toBe("Route::get('/multi-method', [\\{$namespace}\\MultiMethodController::class, 'index'])->name('Controllers.MultiMethodController.index');");
-    expect($routes[2])->toBe("Route::get('/multi-method/{id}', [\\{$namespace}\\MultiMethodController::class, 'show'])->name('Controllers.MultiMethodController.show');");
-
-    // Verify the order of routes
-    expect($routes[0])->toBe('// /');
+    // Verify specific routes have the correct URIs (static routes come before parameterized routes)
+    expect($routes[0])->toBe("Route::get('/multi-method', [\\{$namespace}\\MultiMethodController::class, 'index'])->name('MultiMethodController.index');");
+    expect($routes[1])->toBe("Route::post('/multi-method', [\\{$namespace}\\MultiMethodController::class, 'store'])->name('MultiMethodController.store');");
+    expect($routes[2])->toBe("Route::get('/multi-method/{id}', [\\{$namespace}\\MultiMethodController::class, 'show'])->name('MultiMethodController.show');");
 });

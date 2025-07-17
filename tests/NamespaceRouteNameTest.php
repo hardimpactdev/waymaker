@@ -55,7 +55,7 @@ PHP;
     expect($profileRoute)->not->toBeNull();
 
     // The route name should include the full namespace path
-    expect($profileRoute)->toContain("->name('Controllers.Settings.ProfileController.edit')");
+    expect($profileRoute)->toContain("->name('Settings.ProfileController.edit')");
 });
 
 it('generates route names with deeply nested namespace paths', function () {
@@ -109,7 +109,7 @@ PHP;
     expect($showRoute)->not->toBeNull();
 
     // The index route name should include the full namespace path
-    expect($indexRoute)->toContain("->name('Controllers.Admin.Reports.Financial.RevenueController.index')");
+    expect($indexRoute)->toContain("->name('Admin.Reports.Financial.RevenueController.index')");
 
     // The show route should use the custom name
     expect($showRoute)->toContain("->name('custom.revenue.show')");

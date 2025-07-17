@@ -9,14 +9,17 @@ test('it handles multiple methods with the same HTTP verb and URI', function () 
     namespace HardImpact\Waymaker\Tests;
     
     use Illuminate\Routing\Controller;
+    use HardImpact\Waymaker\Get;
     
     class TestDuplicateController extends Controller
     {
+        #[Get]
         public function index()
         {
             return "Index";
         }
         
+        #[Get(uri: "{id}")]
         public function show()
         {
             return "Show";
@@ -39,8 +42,8 @@ test('it handles multiple methods with the same HTTP verb and URI', function () 
         // Check if methods generate routes with different URIs
         expect($routesString)->toContain("Route::get('/test-duplicate', [\\HardImpact\\Waymaker\\Tests\\TestDuplicateController::class, 'index'])")
             ->and($routesString)->toContain("Route::get('/test-duplicate/{id}', [\\HardImpact\\Waymaker\\Tests\\TestDuplicateController::class, 'show'])")
-            ->and($routesString)->toContain('Controllers.TestDuplicateController.index')
-            ->and($routesString)->toContain('Controllers.TestDuplicateController.show');
+            ->and($routesString)->toContain('TestDuplicateController.index')
+            ->and($routesString)->toContain('TestDuplicateController.show');
     } finally {
         // Clean up test file
         if (file_exists($testControllerPath)) {

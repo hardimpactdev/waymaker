@@ -2,7 +2,6 @@
 
 namespace HardImpact\Waymaker;
 
-use HardImpact\Waymaker\Enums\HttpMethod;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -48,29 +47,6 @@ class Waymaker
     }
 
     /**
-     * Get the HTTP method based on the method name from configuration.
-     *
-     * @param  string  $methodName  The controller method name
-     * @return HttpMethod|null The HTTP method or null if no match found
-     */
-    private static function getMethodDefault(string $methodName): ?HttpMethod
-    {
-        $defaults = config('waymaker.method_defaults', []);
-
-        foreach ($defaults as $method => $methodNames) {
-            if (in_array($methodName, $methodNames, true)) {
-                try {
-                    return HttpMethod::from($method);
-                } catch (\ValueError $e) {
-                    Log::warning("Invalid HTTP method '{$method}' in configuration");
-                }
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Get the kebab-case name of a controller without the "Controller" suffix.
      *
      * @param  string  $controllerName  The controller name
@@ -96,6 +72,7 @@ class Waymaker
         }
 
         $groupedRoutes = [];
+        $routeRegistry = []; // Track routes to detect duplicates
 
         $controllerPath = self::$controllerPath ?? app_path('Http/Controllers');
         $namespace = self::$controllerNamespace ?? 'App\\Http\\Controllers';
@@ -130,7 +107,7 @@ class Waymaker
                 continue;
             }
 
-            self::processControllerClass($class, $groupedRoutes);
+            self::processControllerClass($class, $groupedRoutes, $routeRegistry);
         }
 
         // Flatten the grouped definitions into a single array, with group comments
@@ -148,9 +125,10 @@ class Waymaker
      * Process a controller class to extract route definitions.
      *
      * @param  string  $class  The fully qualified controller class name
-     * @param  array<string, array<string>>  &$groupedRoutes  Reference to the grouped routes array
+     * @param  array<string, array<string, mixed>>  &$groupedRoutes  Reference to the grouped routes array
+     * @param  array<string, array<string, mixed>>  &$routeRegistry  Reference to the route registry
      */
-    private static function processControllerClass(string $class, array &$groupedRoutes): void
+    private static function processControllerClass(string $class, array &$groupedRoutes, array &$routeRegistry): void
     {
         try {
             $reflection = new ReflectionClass($class);
@@ -179,7 +157,7 @@ class Waymaker
 
             // Process each controller method
             foreach ($controllerMethods as $method) {
-                self::processControllerMethod($method, $reflection, $class, $controllerMiddleware, $routePrefix, $groupedRoutes);
+                self::processControllerMethod($method, $reflection, $class, $controllerMiddleware, $routePrefix, $groupedRoutes, $routeRegistry);
             }
         } catch (ReflectionException $e) {
             Log::error("Failed to reflect class {$class}: {$e->getMessage()}");
@@ -194,7 +172,8 @@ class Waymaker
      * @param  string  $class  The fully qualified controller class name
      * @param  array<string>  $controllerMiddleware  The controller middleware
      * @param  string|null  $routePrefix  The route prefix
-     * @param  array<string, array<string>>  &$groupedRoutes  Reference to the grouped routes array
+     * @param  array<string, array<string, mixed>>  &$groupedRoutes  Reference to the grouped routes array
+     * @param  array<string, array<string, mixed>>  &$routeRegistry  Reference to the route registry
      */
     private static function processControllerMethod(
         ReflectionMethod $method,
@@ -202,10 +181,16 @@ class Waymaker
         string $class,
         array $controllerMiddleware,
         ?string $routePrefix,
-        array &$groupedRoutes
+        array &$groupedRoutes,
+        array &$routeRegistry
     ): void {
         // Skip methods in parent class
         if ($method->class !== $class) {
+            return;
+        }
+
+        // Skip constructor and other magic methods
+        if ($method->isConstructor() || $method->isDestructor() || strpos($method->name, '__') === 0) {
             return;
         }
 
@@ -219,79 +204,88 @@ class Waymaker
             }
         }
 
+        // Skip methods without route attributes
+        if ($routeAttr === null) {
+            return;
+        }
+
         // Extract middleware from route attribute
         $routeMiddleware = [];
-        if ($routeAttr && $routeAttr->middleware !== null) {
+        if ($routeAttr->middleware !== null) {
             $routeMiddleware = is_string($routeAttr->middleware) ? [$routeAttr->middleware] : $routeAttr->middleware;
         }
 
         // Combine middleware, removing duplicates
         $combinedMiddleware = array_values(array_unique(array_merge($controllerMiddleware, $routeMiddleware)));
 
-        // Determine HTTP method (from attribute, method defaults, or fallback to GET)
-        $httpMethod = $routeAttr ? $routeAttr->method : (self::getMethodDefault($method->name) ?? HttpMethod::GET);
+        // Get HTTP method from attribute
+        $httpMethod = $routeAttr->method;
         $httpMethodValue = strtolower($httpMethod->value);
 
         // Generate URI and route name
-        $uri = self::generateUri($routePrefix, $routeAttr?->uri, $routeAttr?->parameters, $reflection->getShortName(), $method->name);
-        $routeName = self::generateRouteName($method->name, $routeAttr?->name, $class);
+        $uri = self::generateUri($routePrefix, $routeAttr->uri, $routeAttr->parameters, $reflection->getShortName(), $method->name);
+        $routeName = self::generateRouteName($method->name, $routeAttr->name, $class);
 
-        // Build the route definition
-        $escapedClass = '\\'.ltrim($class, '\\');
-        $definition = self::buildRouteDefinition(
-            $httpMethodValue,
-            $uri,
-            $escapedClass,
-            $method->name,
-            $routeName,
-            $combinedMiddleware
-        );
+        // Check for duplicate routes
+        $routeKey = $httpMethodValue.':'.$uri;
+        if (isset($routeRegistry[$routeKey])) {
+            $existingRoute = $routeRegistry[$routeKey];
+            throw new \RuntimeException(
+                "Duplicate route detected: {$httpMethodValue} {$uri}\n".
+                "First defined in: {$existingRoute['class']}::{$existingRoute['method']}\n".
+                "Duplicate found in: {$class}::{$method->name}"
+            );
+        }
 
-        // Group routes by prefix for organization
-        $groupKey = $routePrefix ?? '/';
+        // Register the route
+        $routeRegistry[$routeKey] = [
+            'class' => $class,
+            'method' => $method->name,
+            'uri' => $uri,
+            'httpMethod' => $httpMethodValue,
+        ];
+
+        // Store route data instead of building definition immediately
+        $routeData = [
+            'method' => $httpMethodValue,
+            'uri' => $uri,
+            'class' => $class,
+            'action' => $method->name,
+            'name' => $routeName,
+            'middleware' => $combinedMiddleware,
+            'routeMiddleware' => $routeMiddleware, // Keep track of route-specific middleware
+            'controllerMiddleware' => $controllerMiddleware, // Keep track of controller middleware
+        ];
+
+        // Group routes by prefix and middleware for organization
+        $groupKey = self::generateGroupKey($routePrefix, $controllerMiddleware);
 
         // Initialize the group if it doesn't exist
         if (! isset($groupedRoutes[$groupKey])) {
-            $groupedRoutes[$groupKey] = [];
+            $groupedRoutes[$groupKey] = [
+                'prefix' => $routePrefix,
+                'middleware' => $controllerMiddleware,
+                'routes' => [],
+            ];
         }
 
-        // Add the route definition to the group
-        $groupedRoutes[$groupKey][] = $definition;
+        // Add the route data to the group
+        $groupedRoutes[$groupKey]['routes'][] = $routeData;
     }
 
     /**
-     * Build a route definition string.
+     * Generate a unique group key based on prefix and middleware.
      *
-     * @param  string  $httpMethod  The HTTP method
-     * @param  string  $uri  The route URI
-     * @param  string  $class  The controller class
-     * @param  string  $methodName  The controller method name
-     * @param  string  $routeName  The route name
-     * @param  array<string>  $middleware  The middleware list
-     * @return string The route definition
+     * @param  string|null  $prefix  The route prefix
+     * @param  array<string>  $middleware  The middleware array
+     * @return string The group key
      */
-    private static function buildRouteDefinition(
-        string $httpMethod,
-        string $uri,
-        string $class,
-        string $methodName,
-        string $routeName,
-        array $middleware
-    ): string {
-        $definition = sprintf(
-            "Route::%s('%s', [%s::class, '%s'])->name('%s')",
-            $httpMethod,
-            $uri,
-            $class,
-            $methodName,
-            $routeName
-        );
+    private static function generateGroupKey(?string $prefix, array $middleware): string
+    {
+        $prefix = $prefix ?? '/';
+        $middlewareKey = empty($middleware) ? 'none' : implode(',', $middleware);
 
-        if (! empty($middleware)) {
-            $definition .= sprintf('->middleware(%s)', self::formatMiddleware($middleware));
-        }
-
-        return $definition.';';
+        return $prefix.'::'.$middlewareKey;
     }
 
     /**
@@ -326,35 +320,56 @@ class Waymaker
         string $controllerName,
         string $methodName
     ): string {
-        // If custom URI is provided, use it
-        if ($customUri) {
-            return '/'.ltrim($customUri, '/');
-        }
-
         // Base URI from prefix or controller name
         if ($prefix) {
-            $uri = '/'.trim($prefix, '/');
+            $baseUri = '/'.trim($prefix, '/');
         } else {
-            $baseUri = self::getControllerBaseName($controllerName);
-            $uri = '/'.$baseUri;
+            $baseUri = '/'.self::getControllerBaseName($controllerName);
         }
 
-        // Apply RESTful method conventions if no parameters are provided
-        if (empty($parameters)) {
-            // Methods that typically operate on individual resources
-            if (in_array($methodName, ['show', 'edit', 'update', 'destroy'])) {
-                // Add {id} parameter for resource methods
-                $uri = rtrim($uri, '/').'/{id}';
-            } elseif ($methodName !== 'index' && $methodName !== 'create' && $methodName !== 'store') {
-                // For non-standard methods, append the method name to differentiate
-                $uri = rtrim($uri, '/').'/'.Str::kebab($methodName);
+        // If custom URI is provided, append it to the base URI
+        if ($customUri !== null) {
+            // Special case: if custom URI is exactly '/', use root
+            if ($customUri === '/') {
+                $uri = '/';
+            } else {
+                // Remove leading slash from custom URI to avoid double slashes
+                $customUri = ltrim($customUri, '/');
+                // If custom URI is empty after trimming, use the base URI
+                if ($customUri === '') {
+                    $uri = $baseUri;
+                } else {
+                    $uri = rtrim($baseUri, '/').'/'.$customUri;
+                }
             }
-        }
 
-        // Add parameters if present
-        if ($parameters) {
-            $wrappedParams = array_map(fn ($param) => '{'.$param.'}', $parameters);
-            $uri = rtrim($uri, '/').'/'.implode('/', $wrappedParams);
+            // Don't apply any additional conventions when custom URI is provided
+        } else {
+            $uri = $baseUri;
+
+            // Apply RESTful method conventions if no parameters are provided
+            if (empty($parameters)) {
+                // Methods that typically operate on individual resources
+                if (in_array($methodName, ['show', 'edit', 'update', 'destroy'])) {
+                    // Add {id} parameter for resource methods
+                    $uri = rtrim($uri, '/').'/{id}';
+                } elseif ($methodName !== 'index' && $methodName !== 'create' && $methodName !== 'store') {
+                    // For non-standard methods, only append the method name if it's different from the controller base name
+                    $methodKebab = Str::kebab($methodName);
+                    $controllerBase = self::getControllerBaseName($controllerName);
+
+                    // Only append method name if it's not already part of the controller base name
+                    if ($methodKebab !== $controllerBase && ! str_ends_with($controllerBase, '-'.$methodKebab)) {
+                        $uri = rtrim($uri, '/').'/'.Str::kebab($methodName);
+                    }
+                }
+            }
+
+            // Add parameters if present
+            if ($parameters) {
+                $wrappedParams = array_map(fn ($param) => '{'.$param.'}', $parameters);
+                $uri = rtrim($uri, '/').'/'.implode('/', $wrappedParams);
+            }
         }
 
         // Ensure the URI is properly formatted
@@ -382,14 +397,14 @@ class Waymaker
         // Replace namespace separators with dots
         $namespacePath = str_replace('\\', '.', $relativeClass);
 
-        // Always use Controllers.{NamespacePath}.{method} format unless a custom name is provided
-        return sprintf('Controllers.%s.%s', $namespacePath, $methodName);
+        // Always use {NamespacePath}.{method} format unless a custom name is provided
+        return sprintf('%s.%s', $namespacePath, $methodName);
     }
 
     /**
-     * Flatten grouped routes into a single array with comments.
+     * Flatten grouped routes into a single array with proper grouping.
      *
-     * @param  array<string, array<string>>  $groupedRoutes  The grouped routes
+     * @param  array<string, array<string, mixed>>  $groupedRoutes  The grouped routes
      * @return array<string> Flattened route definitions
      */
     private static function flattenGroupedRoutes(array $groupedRoutes): array
@@ -397,19 +412,138 @@ class Waymaker
         $flattened = [];
         $isFirst = true;
 
-        foreach ($groupedRoutes as $prefix => $routes) {
+        foreach ($groupedRoutes as $groupKey => $group) {
             // Add a blank line between groups (but not before the first group)
             if (! $isFirst) {
                 $flattened[] = '';
             }
             $isFirst = false;
 
-            $flattened[] = '// /'.trim($prefix, '/');
-            foreach ($routes as $definition) {
-                $flattened[] = $definition;
+            /** @var string|null $prefix */
+            $prefix = $group['prefix'] ?? null;
+            /** @var array<string> $middleware */
+            $middleware = $group['middleware'] ?? [];
+            /** @var array<array<string, mixed>> $routes */
+            $routes = $group['routes'] ?? [];
+
+            // Sort routes within the group by specificity
+            $sortedRoutes = self::sortRoutesBySpecificity($routes);
+
+            // Check if we need a group
+            $hasGroup = $prefix !== null || ! empty($middleware);
+
+            // Generate the group based on what we have
+            if ($prefix !== null && ! empty($middleware)) {
+                // Both prefix and middleware
+                $flattened[] = sprintf(
+                    "Route::prefix('%s')->middleware(%s)->group(function () {",
+                    trim($prefix, '/'),
+                    self::formatMiddleware($middleware)
+                );
+            } elseif ($prefix !== null) {
+                // Only prefix
+                $flattened[] = sprintf(
+                    "Route::prefix('%s')->group(function () {",
+                    trim($prefix, '/')
+                );
+            } elseif (! empty($middleware)) {
+                // Only middleware
+                $flattened[] = sprintf(
+                    'Route::middleware(%s)->group(function () {',
+                    self::formatMiddleware($middleware)
+                );
+            }
+
+            // Add routes (with indentation only if in a group)
+            foreach ($sortedRoutes as $routeData) {
+                if ($hasGroup) {
+                    $flattened[] = '    '.self::buildRouteDefinition($routeData, $prefix !== null);
+                } else {
+                    $flattened[] = self::buildRouteDefinition($routeData, $prefix !== null);
+                }
+            }
+
+            // Close group if we opened one
+            if ($hasGroup) {
+                $flattened[] = '});';
             }
         }
 
         return $flattened;
+    }
+
+    /**
+     * Build a route definition string from route data.
+     *
+     * @param  array<string, mixed>  $routeData  The route data
+     * @param  bool  $hasPrefix  Whether the route is within a prefix group
+     * @return string The route definition
+     */
+    private static function buildRouteDefinition(array $routeData, bool $hasPrefix): string
+    {
+        $escapedClass = '\\'.ltrim($routeData['class'], '\\');
+
+        // Adjust URI based on whether we're in a prefix group
+        $uri = $routeData['uri'];
+        if ($hasPrefix && $routeData['uri'] !== '/') {
+            // Remove the prefix from the URI since it's handled by the group
+            $prefixPattern = '/^\/[^\/]+/';
+            $uri = preg_replace($prefixPattern, '', $uri);
+            $uri = ltrim($uri, '/');
+        }
+
+        $definition = sprintf(
+            "Route::%s('%s', [%s::class, '%s'])->name('%s')",
+            $routeData['method'],
+            $uri,
+            $escapedClass,
+            $routeData['action'],
+            $routeData['name']
+        );
+
+        // Only add route-specific middleware (not controller middleware which is on the group)
+        if (! empty($routeData['routeMiddleware'])) {
+            $definition .= sprintf('->middleware(%s)', self::formatMiddleware($routeData['routeMiddleware']));
+        }
+
+        return $definition.';';
+    }
+
+    /**
+     * Sort routes by specificity: depth first, then static routes before parameterized routes.
+     *
+     * @param  array<array<string, mixed>>  $routes  The routes to sort
+     * @return array<array<string, mixed>> Sorted route definitions
+     */
+    private static function sortRoutesBySpecificity(array $routes): array
+    {
+        usort($routes, function ($a, $b) {
+            // Now working with route data arrays instead of strings
+            $uriA = $a['uri'];
+            $uriB = $b['uri'];
+
+            // Count segments (depth) - number of slashes
+            $depthA = substr_count($uriA, '/');
+            $depthB = substr_count($uriB, '/');
+
+            // Primary sort: Routes with fewer segments (less depth) come first
+            if ($depthA !== $depthB) {
+                return $depthA - $depthB;
+            }
+
+            // Secondary sort: Within the same depth, count parameters
+            $paramsA = substr_count($uriA, '{');
+            $paramsB = substr_count($uriB, '{');
+
+            // Routes with fewer parameters (more static) come first
+            if ($paramsA !== $paramsB) {
+                return $paramsA - $paramsB;
+            }
+
+            // Tertiary sort: Alphabetically for consistency
+            return strcmp($uriA, $uriB);
+        });
+
+        return $routes;
     }
 }

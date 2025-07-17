@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\File;
 
 class WaymakerCommand extends Command
 {
-    public $signature = 'waymaker:make';
+    public $signature = 'waymaker:generate';
 
     public $description = 'Generate routes for the application';
 

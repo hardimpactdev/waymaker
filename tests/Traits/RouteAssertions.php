@@ -26,7 +26,7 @@ trait RouteAssertions
         ?array $middleware = null
     ): void {
         $routes = Waymaker::generateRouteDefinitions();
-        $routeName = $name ?? "Controllers.{$controller}.{$action}";
+        $routeName = $name ?? "{$controller}.{$action}";
 
         // Build the expected route pattern
         $pattern = $this->buildExpectedRoutePattern(
