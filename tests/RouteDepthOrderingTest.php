@@ -198,12 +198,12 @@ PHP;
     expect($definitionsString)->toContain("'archived'");
 
     // Parameterized routes should also be defined
-    expect($definitionsString)->toContain("{inspection}");
-    expect($definitionsString)->toContain("{inspection}/edit");
+    expect($definitionsString)->toContain('{inspection}');
+    expect($definitionsString)->toContain('{inspection}/edit');
 
     // Verify deeper routes are present
-    expect($definitionsString)->toContain("reports/monthly");
-    expect($definitionsString)->toContain("{inspection}/items/{item}");
+    expect($definitionsString)->toContain('reports/monthly');
+    expect($definitionsString)->toContain('{inspection}/items/{item}');
 });
 
 /**
