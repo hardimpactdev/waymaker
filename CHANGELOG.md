@@ -10,10 +10,13 @@ Waymaker generates route files based on your public controller methods using PHP
 
 #### Features
 
-- Attribute-based route generation
-- Inertia.js TypeScript route generation
-- Laravel route file generation
-- Automatic controller scanning
+- Attribute-based route generation with `#[Get]`, `#[Post]`, `#[Put]`, `#[Patch]`, `#[Delete]` attributes
+- Smart route grouping with automatic prefix and middleware consolidation
+- Laravel route file generation at `routes/waymaker.php`
+- Automatic controller scanning with subdirectory support
+- Integration with [Laravel Wayfinder](https://github.com/laravel/wayfinder) for TypeScript route definitions
+- Route parameter support with model binding (e.g., `parameters: ['article:slug']`)
+- Controller-level route prefixes and middleware via static properties
 
 ## v0.0.1 - 2026-01-05
 

@@ -186,11 +186,24 @@ PHP;
         }
     }
 
-    // This test needs to be updated for the new grouped route format
-    // For now, just verify that routes are generated
+    // Verify routes are generated
     expect(count($uris))->toBeGreaterThan(0);
 
-    // TODO: Update this test to work with grouped route format
+    // Verify that static routes come before parameterized routes at the same depth
+    // by checking that 'create' and 'archived' appear before '{inspection}/edit'
+    $definitionsString = implode("\n", $definitions);
+
+    // Static depth-2 routes should be defined
+    expect($definitionsString)->toContain("'create'");
+    expect($definitionsString)->toContain("'archived'");
+
+    // Parameterized routes should also be defined
+    expect($definitionsString)->toContain("{inspection}");
+    expect($definitionsString)->toContain("{inspection}/edit");
+
+    // Verify deeper routes are present
+    expect($definitionsString)->toContain("reports/monthly");
+    expect($definitionsString)->toContain("{inspection}/items/{item}");
 });
 
 /**
@@ -268,8 +281,7 @@ PHP;
     $routes = array_filter($definitions, fn ($def) => str_contains($def, 'Route::'));
     $routes = array_values($routes);
 
-    // This test needs to be updated for the new grouped route format
-    // For now, just verify that expected routes are generated
+    // Verify routes are generated
     expect(count($routes))->toBeGreaterThan(0);
 
     // Verify expected routes exist in the definitions
@@ -278,5 +290,13 @@ PHP;
     expect($definitionsString)->toContain('ApiController');
     expect($definitionsString)->toContain("Route::prefix('api')");
 
-    // TODO: Update this test to work with grouped route format
+    // Verify MainController routes
+    expect($definitionsString)->toContain("'/'");
+    expect($definitionsString)->toContain("'about'");
+    expect($definitionsString)->toContain("'contact/form'");
+
+    // Verify ApiController routes with prefix
+    expect($definitionsString)->toContain("'users'");
+    expect($definitionsString)->toContain("'users/{id}'");
+    expect($definitionsString)->toContain("'users/{id}/posts/{post}'");
 });

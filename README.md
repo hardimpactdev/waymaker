@@ -10,6 +10,18 @@ You can install the package via composer:
 composer require hardimpactdev/waymaker
 ```
 
+## Requirements
+
+- PHP 8.4+
+- Laravel 10, 11, or 12
+- [vite-plugin-run](https://www.npmjs.com/package/vite-plugin-run) (for automatic route generation during development)
+
+Install the vite plugin:
+
+```bash
+npm install -D vite-plugin-run
+```
+
 ## Usage
 
 Update your vite config to include an additional run command:
@@ -38,7 +50,7 @@ use HardImpact\Waymaker\Facades\Waymaker;
 Waymaker::routes();
 ```
 
-Now you're all set. Running vite dev should nog generate the routes based on your controller methods. On file change of any controller the routes file will be regenerated.
+Now you're all set. Running vite dev should now generate the routes based on your controller methods. On file change of any controller the routes file will be regenerated.
 
 ### Route definition structure
 
@@ -186,6 +198,31 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 ## Contributing
 
 Feel free to contribute. Make sure to add/update tests for new or improved features.
+
+## Troubleshooting
+
+### Routes not being generated
+
+1. **Missing route attribute**: Ensure all controller methods have a route attribute (`#[Get]`, `#[Post]`, etc.). Methods without attributes are ignored.
+2. **Controller not in expected directory**: Waymaker scans `app/Http/Controllers` by default. Ensure your controllers are in this directory or a subdirectory.
+3. **Vite not running**: The `vite-plugin-run` only triggers during `vite dev`. Run `php artisan waymaker:generate` manually for production builds.
+
+### Duplicate route error
+
+If you see a `RuntimeException` about duplicate routes:
+- Check that you don't have multiple methods with the same HTTP method and URI
+- Ensure route prefixes don't create conflicts between controllers
+- Use unique route names if needed via the `name` parameter
+
+### Routes file not included
+
+Make sure your `routes/web.php` (or appropriate routes file) includes:
+
+```php
+use HardImpact\Waymaker\Facades\Waymaker;
+
+Waymaker::routes();
+```
 
 ## Security Vulnerabilities
 
