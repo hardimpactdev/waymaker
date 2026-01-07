@@ -2,6 +2,19 @@
 
 All notable changes to `waymaker` will be documented in this file.
 
+## v0.1.0 - 2026-01-07
+
+### First Stable Release
+
+Waymaker generates route files based on your public controller methods using PHP attributes.
+
+#### Features
+
+- Attribute-based route generation
+- Inertia.js TypeScript route generation
+- Laravel route file generation
+- Automatic controller scanning
+
 ## v0.0.1 - 2026-01-05
 
 Initial release
