@@ -1,0 +1,24 @@
+name: "Update Packagist"
+
+on:
+  push:
+    tags:
+      - 'v*'
+  release:
+    types: [released]
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Update Packagist
+        env:
+          PACKAGIST_USERNAME: ${{ secrets.PACKAGIST_USERNAME }}
+          PACKAGIST_TOKEN: ${{ secrets.PACKAGIST_TOKEN }}
+        run: |
+          curl -XPOST \
+            -H "Content-Type: application/json" \
+            "https://packagist.org/api/update-package?username=${PACKAGIST_USERNAME}&apiToken=${PACKAGIST_TOKEN}" \
+            -d '{"repository":{"url":"https://packagist.org/packages/hardimpactdev/waymaker"}}'
