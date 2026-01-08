@@ -50,17 +50,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
     - Method-level customization via Route attributes
     - No configuration file needed (removed in v2.0)
 
-## Code Improvements Made
-
--   Fixed route conflicts when controllers have multiple methods with the same HTTP verb
--   Implemented RESTful URI generation based on method name convention
--   Improved controller method discovery and filtering
--   Enhanced test coverage for multiple methods
--   Updated documentation to reflect new functionality
-
 ## File Structure
 
 -   `src/Waymaker.php` - Main class implementing route generation logic
--   `src/Route.php` - Attribute class for route customization
+-   `src/RouteAttribute.php` - Base attribute class with common properties (uri, name, parameters, middleware)
+-   `src/Get.php`, `src/Post.php`, `src/Put.php`, `src/Patch.php`, `src/Delete.php` - HTTP method-specific attributes
 -   `src/Enums/HttpMethod.php` - Enum for HTTP methods
+-   `src/Commands/WaymakerCommand.php` - Artisan command (`waymaker:generate`)
+-   `src/Facades/Waymaker.php` - Facade for accessing routes
 -   `tests/` - Comprehensive test suite

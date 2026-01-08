@@ -33,4 +33,5 @@ testbench.yaml
 
 # AI
 /.cursor
-/.claude
+/.claude/*
+!/.claude/skills/
