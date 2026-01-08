@@ -2,6 +2,21 @@
 
 All notable changes to `waymaker` will be documented in this file.
 
+## v0.1.1 - 2026-01-08
+
+### New Features
+
+- Added Laravel Boost integration with AI guidelines for route attributes
+- Added release skill for standardized GitHub releases
+
+### Documentation
+
+- Document available route attributes and parameters
+- Include example controller with route attributes
+- Add route naming conventions reference
+
+**Full Changelog**: https://github.com/hardimpactdev/waymaker/compare/v0.1.0...v0.1.1
+
 ## v0.1.0 - 2026-01-07
 
 ### First Stable Release
