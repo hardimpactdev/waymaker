@@ -2,6 +2,16 @@
 
 All notable changes to `waymaker` will be documented in this file.
 
+## v0.1.2 - 2026-01-15
+
+### Documentation
+
+- Added AGENTS.md with comprehensive AI coding agent guidelines
+- Converted CLAUDE.md to symlink for OpenCode compatibility
+- Enhanced code style documentation with examples
+
+**Full Changelog**: https://github.com/hardimpactdev/waymaker/compare/v0.1.1...v0.1.2
+
 ## v0.1.1 - 2026-01-08
 
 ### New Features
