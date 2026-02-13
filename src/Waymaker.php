@@ -189,8 +189,9 @@ class Waymaker
             return;
         }
 
-        // Skip constructor and other magic methods
-        if ($method->isConstructor() || $method->isDestructor() || strpos($method->name, '__') === 0) {
+        // Skip constructor and other magic methods (but allow __invoke)
+        if ($method->isConstructor() || $method->isDestructor() ||
+            (strpos($method->name, '__') === 0 && $method->name !== '__invoke')) {
             return;
         }
 
@@ -320,6 +321,32 @@ class Waymaker
         string $controllerName,
         string $methodName
     ): string {
+        // Special handling for invokable controllers
+        if ($methodName === '__invoke') {
+            $uri = null;
+
+            // If custom URI provided, use it as the full path
+            if ($customUri !== null) {
+                $uri = $customUri === '/' ? '/' : ltrim($customUri, '/');
+            } elseif ($prefix) {
+                // If prefix is set, that's the complete route
+                $uri = trim($prefix, '/');
+            } else {
+                // Default to root (empty, parameters will be added directly)
+                $uri = '';
+            }
+
+            // Add parameters if present
+            if ($parameters) {
+                $wrappedParams = array_map(fn ($param) => '{'.$param.'}', $parameters);
+                $uri = rtrim($uri, '/').'/'.implode('/', $wrappedParams);
+                $uri = ltrim($uri, '/');
+            }
+
+            // If still empty, default to root
+            return $uri === '' ? '/' : $uri;
+        }
+
         // Base URI from prefix or controller name
         if ($prefix) {
             $baseUri = '/'.trim($prefix, '/');
@@ -396,6 +423,11 @@ class Waymaker
 
         // Replace namespace separators with dots
         $namespacePath = str_replace('\\', '.', $relativeClass);
+
+        // For invokable controllers, use controller name only (no method suffix)
+        if ($methodName === '__invoke') {
+            return $namespacePath;
+        }
 
         // Always use {NamespacePath}.{method} format unless a custom name is provided
         return sprintf('%s.%s', $namespacePath, $methodName);
