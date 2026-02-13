@@ -2,26 +2,49 @@
 
 All notable changes to `waymaker` will be documented in this file.
 
-## v0.2.0 - 2026-01-30
+## v0.2.0 - Invokable Controller Support - 2026-01-30
 
-### New Features
+### What's New
 
-- **Invokable Controller Support**: Single-action controllers using `__invoke` method are now fully supported
-  - Root route invokables: `HomeController::__invoke()` → `Route::get('/', ...)`
-  - Prefixed invokables: `ContactController` with `$routePrefix = 'contact'` → grouped routes
-  - Custom URI invokables: `#[Get(uri: 'about-us')]` → custom paths
-  - Parameter support: `#[Get(parameters: ['id'])]` → dynamic routes
-  - Route naming: Uses controller name only (e.g., `HomeController` not `HomeController.__invoke`)
-  - Full middleware support at both controller and route levels
-  - Works alongside regular multi-method controllers
+#### Invokable Controller Support
 
-### Improvements
+Single-action controllers using `__invoke` method are now fully supported!
 
-- Enhanced route generation to detect and properly handle `__invoke` methods
-- Improved URI generation for invokable controllers (no controller name in path)
-- Route names exclude `__invoke` suffix for cleaner naming
+**Features:**
 
-**Full Changelog**: https://github.com/hardimpactdev/waymaker/compare/v0.1.1...v0.2.0
+- Root route invokables: `HomeController::__invoke()` → `Route::get('/', ...)`
+- Prefixed invokables: ContactController with `$routePrefix = 'contact'` → grouped routes
+- Custom URI invokables: `#[Get(uri: 'about-us')]` → custom paths
+- Parameter support: `#[Get(parameters: ['id'])]` → dynamic routes like `{id}`
+- Route naming: Uses controller name only (e.g., `HomeController` not `HomeController.__invoke`)
+- Full middleware support at both controller and route levels
+- Works alongside regular multi-method controllers
+
+**Example:**
+
+```php
+class ContactController extends Controller
+{
+    protected static string $routePrefix = 'contact';
+    protected static string $routeMiddleware = 'guest';
+
+    #[Get]
+    public function __invoke(): \Inertia\Response
+    {
+        return inertia('Contact');
+    }
+}
+
+```
+**Generated:**
+
+```php
+Route::prefix('contact')->middleware('guest')->group(function () {
+    Route::get('contact', [\App\Http\Controllers\ContactController::class, '__invoke'])->name('ContactController');
+});
+
+```
+See the full changelog in [CHANGELOG.md](../../blob/main/CHANGELOG.md)
 
 ## v0.1.2 - 2026-01-15
 
