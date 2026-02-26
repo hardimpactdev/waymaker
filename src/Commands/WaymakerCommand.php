@@ -24,8 +24,8 @@ class WaymakerCommand extends Command
         // Generate routes
         $routes = Waymaker::generateRouteDefinitions();
 
-        // Compose the full file content with opening tag + use statement
-        $content = "<?php\n\nuse Illuminate\Support\Facades\Route;\n\n".implode("\n", $routes)."\n";
+        // Compose the full file content with strict types, opening tag + use statement
+        $content = "<?php\n\ndeclare(strict_types=1);\n\nuse Illuminate\Support\Facades\Route;\n\n".implode("\n", $routes)."\n";
 
         // Save the file
         File::put($filePath, $content);

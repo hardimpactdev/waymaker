@@ -468,20 +468,20 @@ class Waymaker
             if ($prefix !== null && ! empty($middleware)) {
                 // Both prefix and middleware
                 $flattened[] = sprintf(
-                    "Route::prefix('%s')->middleware(%s)->group(function () {",
+                    "Route::prefix('%s')->middleware(%s)->group(function (): void {",
                     trim($prefix, '/'),
                     self::formatMiddleware($middleware)
                 );
             } elseif ($prefix !== null) {
                 // Only prefix
                 $flattened[] = sprintf(
-                    "Route::prefix('%s')->group(function () {",
+                    "Route::prefix('%s')->group(function (): void {",
                     trim($prefix, '/')
                 );
             } elseif (! empty($middleware)) {
                 // Only middleware
                 $flattened[] = sprintf(
-                    'Route::middleware(%s)->group(function () {',
+                    'Route::middleware(%s)->group(function (): void {',
                     self::formatMiddleware($middleware)
                 );
             }
