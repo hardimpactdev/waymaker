@@ -26,7 +26,7 @@ namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
 
 use HardImpact\Waymaker\Get;
 
-class InspectionEntryController
+class PrefixInspectionEntryController
 {
     protected static string $routePrefix = 'inspections';
     protected static array $routeMiddleware = ['auth', 'active'];
@@ -51,7 +51,7 @@ class InspectionEntryController
 }
 PHP;
 
-    file_put_contents($this->tempPath.'/InspectionEntryController.php', $controllerContent);
+    file_put_contents($this->tempPath.'/PrefixInspectionEntryController.php', $controllerContent);
 
     // Generate routes
     $definitions = Waymaker::generateRouteDefinitions();
@@ -68,7 +68,7 @@ PHP;
         if (str_contains($definition, 'html')) {
             $htmlRoute = $definition;
         }
-        if (str_contains($definition, 'index') && str_contains($definition, 'InspectionEntryController')) {
+        if (str_contains($definition, 'index') && str_contains($definition, 'PrefixInspectionEntryController')) {
             $indexRoute = $definition;
         }
     }
@@ -100,7 +100,7 @@ namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
 
 use HardImpact\Waymaker\Get;
 
-class InspectionEntryExportController
+class PrefixInspectionExportController
 {
     protected static string $routePrefix = 'inspections';
     protected static array $routeMiddleware = ['auth', 'active'];
@@ -119,7 +119,7 @@ class InspectionEntryExportController
 }
 PHP;
 
-    file_put_contents($this->tempPath.'/InspectionEntryExportController.php', $controllerContent);
+    file_put_contents($this->tempPath.'/PrefixInspectionExportController.php', $controllerContent);
 
     // Generate routes
     $definitions = Waymaker::generateRouteDefinitions();
@@ -129,10 +129,10 @@ PHP;
     $reportsRoute = null;
 
     foreach ($definitions as $definition) {
-        if (str_contains($definition, 'export') && str_contains($definition, 'InspectionEntryExportController')) {
+        if (str_contains($definition, 'export') && str_contains($definition, 'PrefixInspectionExportController')) {
             $exportRoute = $definition;
         }
-        if (str_contains($definition, 'reports') && str_contains($definition, 'InspectionEntryExportController')) {
+        if (str_contains($definition, 'reports') && str_contains($definition, 'PrefixInspectionExportController')) {
             $reportsRoute = $definition;
         }
     }

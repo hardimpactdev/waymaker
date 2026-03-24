@@ -26,7 +26,7 @@ namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
 
 use HardImpact\Waymaker\Get;
 
-class InspectionEntryController
+class DupInspectionEntryController
 {
     protected static string $routePrefix = 'inspections';
     protected static array $routeMiddleware = ['auth', 'active'];
@@ -34,7 +34,7 @@ class InspectionEntryController
     #[Get]
     public function index() 
     {
-        return 'index from InspectionEntryController';
+        return 'index from DupInspectionEntryController';
     }
 }
 PHP;
@@ -46,7 +46,7 @@ namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
 
 use HardImpact\Waymaker\Get;
 
-class InspectionEntryListController
+class DupInspectionEntryListController
 {
     protected static string $routePrefix = 'inspections';
     protected static array $routeMiddleware = ['auth', 'active'];
@@ -54,13 +54,13 @@ class InspectionEntryListController
     #[Get]
     public function index() 
     {
-        return 'index from InspectionEntryListController';
+        return 'index from DupInspectionEntryListController';
     }
 }
 PHP;
 
-    file_put_contents($this->tempPath.'/InspectionEntryController.php', $controller1);
-    file_put_contents($this->tempPath.'/InspectionEntryListController.php', $controller2);
+    file_put_contents($this->tempPath.'/DupInspectionEntryController.php', $controller1);
+    file_put_contents($this->tempPath.'/DupInspectionEntryListController.php', $controller2);
 
     // Generating routes should throw an exception due to duplicates
     expect(fn () => Waymaker::generateRouteDefinitions())
@@ -84,7 +84,7 @@ use HardImpact\Waymaker\Get;
 use HardImpact\Waymaker\Post;
 use HardImpact\Waymaker\Delete;
 
-class ResourceController
+class DupResourceController
 {
     protected static string $routePrefix = 'resources';
     
@@ -114,7 +114,7 @@ class ResourceController
 }
 PHP;
 
-    file_put_contents($this->tempPath.'/ResourceController.php', $controller);
+    file_put_contents($this->tempPath.'/DupResourceController.php', $controller);
 
     // Generate routes
     $definitions = Waymaker::generateRouteDefinitions();
@@ -130,16 +130,16 @@ PHP;
 
     foreach ($definitions as $definition) {
         // Routes are now grouped, so we look for the route without the prefix
-        if (str_contains($definition, "Route::get('')") && str_contains($definition, 'ResourceController') && str_contains($definition, "'index']")) {
+        if (str_contains($definition, "Route::get('',") && str_contains($definition, 'DupResourceController') && str_contains($definition, "'index']")) {
             $getIndex = $definition;
         }
-        if (str_contains($definition, "Route::post('')") && str_contains($definition, 'ResourceController') && str_contains($definition, "'store']")) {
+        if (str_contains($definition, "Route::post('',") && str_contains($definition, 'DupResourceController') && str_contains($definition, "'store']")) {
             $postStore = $definition;
         }
-        if (str_contains($definition, "Route::get('{id}'") && str_contains($definition, 'ResourceController') && str_contains($definition, "'show']")) {
+        if (str_contains($definition, "Route::get('{id}'") && str_contains($definition, 'DupResourceController') && str_contains($definition, "'show']")) {
             $getShow = $definition;
         }
-        if (str_contains($definition, "Route::delete('{id}'") && str_contains($definition, 'ResourceController') && str_contains($definition, "'destroy']")) {
+        if (str_contains($definition, "Route::delete('{id}'") && str_contains($definition, 'DupResourceController') && str_contains($definition, "'destroy']")) {
             $deleteDestroy = $definition;
         }
     }

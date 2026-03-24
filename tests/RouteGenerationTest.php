@@ -26,7 +26,7 @@ test('it generates correct route definitions from controllers', function () {
     $routes = Waymaker::generateRouteDefinitions();
 
     // The routes should be within a group with prefix and middleware
-    $expectedGroupStart = "Route::prefix('articles')->middleware(['auth', 'verified'])->group(function () {";
+    $expectedGroupStart = "Route::prefix('articles')->middleware(['auth', 'verified'])->group(function (): void {";
     $expectedShowRoute = "Route::get('{article:slug}', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\ArticleController::class, 'show'])->name('ArticleController.show');";
     $expectedStoreRoute = "Route::post('', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\ArticleController::class, 'store'])->name('ArticleController.store');";
     $expectedUpdateRoute = "Route::put('{article:slug}', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\ArticleController::class, 'update'])->name('ArticleController.update');";
@@ -119,8 +119,8 @@ test('it correctly groups routes by prefix', function () {
     $flattenedString = implode("\n", $flattened);
 
     // Check for grouped routes
-    expect($flattenedString)->toContain("Route::prefix('api')->group(function () {");
-    expect($flattenedString)->toContain("Route::prefix('admin')->group(function () {");
+    expect($flattenedString)->toContain("Route::prefix('api')->group(function (): void {");
+    expect($flattenedString)->toContain("Route::prefix('admin')->group(function (): void {");
 
     // Check for routes
     expect($flattenedString)->toContain('UserController');

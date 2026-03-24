@@ -27,7 +27,7 @@ namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
 use HardImpact\Waymaker\Get;
 use HardImpact\Waymaker\Post;
 
-class InspectionController
+class DepthInspectionController
 {
     protected static string $routePrefix = 'inspections';
     
@@ -115,14 +115,14 @@ class InspectionController
 }
 PHP;
 
-    file_put_contents($this->tempPath.'/InspectionController.php', $controllerContent);
+    file_put_contents($this->tempPath.'/DepthInspectionController.php', $controllerContent);
 
     // Generate routes
     $definitions = Waymaker::generateRouteDefinitions();
 
-    // Filter to only inspection routes
+    // Filter to only inspection routes (routes are grouped, check for controller name)
     $inspectionRoutes = array_filter($definitions, function ($def) {
-        return str_contains($def, '/inspections') && str_contains($def, 'Route::');
+        return str_contains($def, 'DepthInspectionController') && str_contains($def, 'Route::');
     });
 
     // Reset array keys
@@ -176,7 +176,7 @@ PHP;
         }
 
         // Extract route URIs
-        if (preg_match("/Route::\w+\('([^']+)'.*InspectionController/", $definition, $matches)) {
+        if (preg_match("/Route::\w+\('([^']+)'.*DepthInspectionController/", $definition, $matches)) {
             $uri = $matches[1];
             // If we're in a group, prepend the group prefix
             if ($inGroup && $groupPrefix) {
@@ -286,14 +286,15 @@ PHP;
 
     // Verify expected routes exist in the definitions
     $definitionsString = implode("\n", $definitions);
+
     expect($definitionsString)->toContain('MainController');
     expect($definitionsString)->toContain('ApiController');
     expect($definitionsString)->toContain("Route::prefix('api')");
 
     // Verify MainController routes
     expect($definitionsString)->toContain("'/'");
-    expect($definitionsString)->toContain("'about'");
-    expect($definitionsString)->toContain("'contact/form'");
+    expect($definitionsString)->toContain("'/main/about'");
+    expect($definitionsString)->toContain("'/main/contact/form'");
 
     // Verify ApiController routes with prefix
     expect($definitionsString)->toContain("'users'");

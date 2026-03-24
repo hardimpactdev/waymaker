@@ -26,7 +26,7 @@ namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
 
 use HardImpact\Waymaker\Get;
 
-class InspectionController
+class OrderInspectionController
 {
     protected static string $routePrefix = 'inspections';
     
@@ -51,7 +51,7 @@ namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
 
 use HardImpact\Waymaker\Get;
 
-class InspectionExportController
+class OrderExportController
 {
     protected static string $routePrefix = 'inspections';
     
@@ -70,7 +70,7 @@ namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
 
 use HardImpact\Waymaker\Get;
 
-class InspectionCreateController
+class OrderCreateController
 {
     protected static string $routePrefix = 'inspections';
     
@@ -82,9 +82,9 @@ class InspectionCreateController
 }
 PHP;
 
-    file_put_contents($this->tempPath.'/InspectionController.php', $inspectionController);
-    file_put_contents($this->tempPath.'/InspectionExportController.php', $exportController);
-    file_put_contents($this->tempPath.'/InspectionCreateController.php', $createController);
+    file_put_contents($this->tempPath.'/OrderInspectionController.php', $inspectionController);
+    file_put_contents($this->tempPath.'/OrderExportController.php', $exportController);
+    file_put_contents($this->tempPath.'/OrderCreateController.php', $createController);
 
     // Generate routes
     $definitions = Waymaker::generateRouteDefinitions();
@@ -96,17 +96,17 @@ PHP;
     $createPos = null;
 
     foreach ($definitions as $index => $definition) {
-        // Routes are now grouped, so we look for the route without the prefix
-        if (str_contains($definition, "Route::get('')") && str_contains($definition, 'InspectionController') && str_contains($definition, 'index')) {
+        // Routes are grouped, so we look for the route without the prefix
+        if (str_contains($definition, "Route::get('',") && str_contains($definition, 'OrderInspectionController') && str_contains($definition, 'index')) {
             $indexPos = $index;
         }
-        if (str_contains($definition, "Route::get('{id}'") && str_contains($definition, 'InspectionController')) {
+        if (str_contains($definition, "Route::get('{id}',") && str_contains($definition, 'OrderInspectionController')) {
             $showPos = $index;
         }
-        if (str_contains($definition, "Route::get('export'") && str_contains($definition, 'InspectionExportController')) {
+        if (str_contains($definition, "Route::get('export',") && str_contains($definition, 'OrderExportController')) {
             $exportPos = $index;
         }
-        if (str_contains($definition, "Route::get('create'") && str_contains($definition, 'InspectionCreateController')) {
+        if (str_contains($definition, "Route::get('create',") && str_contains($definition, 'OrderCreateController')) {
             $createPos = $index;
         }
     }
@@ -135,7 +135,7 @@ namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
 use HardImpact\Waymaker\Get;
 use HardImpact\Waymaker\Post;
 
-class ResourceController
+class OrderResourceController
 {
     protected static string $routePrefix = 'resources';
     
@@ -189,36 +189,36 @@ class ResourceController
 }
 PHP;
 
-    file_put_contents($this->tempPath.'/ResourceController.php', $controller);
+    file_put_contents($this->tempPath.'/OrderResourceController.php', $controller);
 
     // Generate routes
     $definitions = Waymaker::generateRouteDefinitions();
 
-    // Find positions of routes
+    // Find positions of routes (URIs are relative within the prefix group)
     $positions = [];
     foreach ($definitions as $index => $definition) {
-        if (str_contains($definition, "'/resources'") && str_contains($definition, 'index')) {
+        if (str_contains($definition, "Route::get('',") && str_contains($definition, 'index')) {
             $positions['index'] = $index;
         }
-        if (str_contains($definition, "'/resources/search'")) {
+        if (str_contains($definition, "'search',") && str_contains($definition, 'OrderResourceController')) {
             $positions['search'] = $index;
         }
-        if (str_contains($definition, "'/resources/export/pdf'")) {
+        if (str_contains($definition, "'export/pdf',")) {
             $positions['exportPdf'] = $index;
         }
-        if (str_contains($definition, "'/resources/export/csv'")) {
+        if (str_contains($definition, "'export/csv',")) {
             $positions['exportCsv'] = $index;
         }
-        if (preg_match("/'\\/resources\\/{id}'/", $definition) && str_contains($definition, 'show')) {
+        if (preg_match("/Route::get\('\\{id\\}',/", $definition) && str_contains($definition, "'show'")) {
             $positions['show'] = $index;
         }
-        if (str_contains($definition, "'/resources/{id}/edit'")) {
+        if (str_contains($definition, "'{id}/edit',")) {
             $positions['edit'] = $index;
         }
-        if (str_contains($definition, "'/resources/{id}/comments'")) {
+        if (str_contains($definition, "'{id}/comments',")) {
             $positions['comments'] = $index;
         }
-        if (str_contains($definition, "'/resources/{resource}/{id}'")) {
+        if (str_contains($definition, "'{resource}/{id}',")) {
             $positions['nested'] = $index;
         }
     }

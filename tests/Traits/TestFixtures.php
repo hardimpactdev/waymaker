@@ -41,7 +41,14 @@ trait TestFixtures
         $destPath = $this->tempPath.'/'.($destination ?? basename($source));
 
         if (File::exists($sourcePath)) {
-            File::copy($sourcePath, $destPath);
+            $content = File::get($sourcePath);
+            // Rewrite fixture namespace to the temp controller namespace
+            $content = preg_replace(
+                '/namespace\s+HardImpact\\\\Waymaker\\\\Tests\\\\Fixtures\\\\Controllers\\\\[^;]+;/',
+                'namespace HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp;',
+                $content
+            );
+            File::put($destPath, $content);
         } else {
             throw new \InvalidArgumentException("Fixture not found: {$sourcePath}");
         }
@@ -61,7 +68,14 @@ trait TestFixtures
         }
 
         foreach (File::files($sourcePath) as $file) {
-            File::copy($file->getPathname(), $this->tempPath.'/'.basename($file));
+            $content = File::get($file->getPathname());
+            // Rewrite fixture namespace to the temp controller namespace
+            $content = preg_replace(
+                '/namespace\s+HardImpact\\\\Waymaker\\\\Tests\\\\Fixtures\\\\Controllers\\\\[^;]+;/',
+                'namespace HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp;',
+                $content
+            );
+            File::put($this->tempPath.'/'.basename($file), $content);
         }
     }
 

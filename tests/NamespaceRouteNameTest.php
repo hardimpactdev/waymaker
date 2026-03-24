@@ -27,7 +27,7 @@ namespace HardImpact\Waymaker\Tests\Http\Controllers\temp\Settings;
 
 use HardImpact\Waymaker\Get;
 
-class ProfileController
+class NsProfileController
 {
     #[Get(uri: '/settings/profile', middleware: 'auth')]
     public function edit()
@@ -37,16 +37,16 @@ class ProfileController
 }
 PHP;
 
-    file_put_contents($settingsPath.'/ProfileController.php', $profileControllerContent);
+    file_put_contents($settingsPath.'/NsProfileController.php', $profileControllerContent);
 
     $this->setupWaymaker();
 
     $routes = Waymaker::generateRouteDefinitions();
 
-    // Find the route for the ProfileController edit method
+    // Find the route for the NsProfileController edit method
     $profileRoute = null;
     foreach ($routes as $route) {
-        if (str_contains($route, 'ProfileController') && str_contains($route, 'edit')) {
+        if (str_contains($route, 'NsProfileController') && str_contains($route, 'edit')) {
             $profileRoute = $route;
             break;
         }
@@ -55,7 +55,7 @@ PHP;
     expect($profileRoute)->not->toBeNull();
 
     // The route name should include the full namespace path
-    expect($profileRoute)->toContain("->name('Settings.ProfileController.edit')");
+    expect($profileRoute)->toContain("->name('Settings.NsProfileController.edit')");
 });
 
 it('generates route names with deeply nested namespace paths', function () {
@@ -71,7 +71,7 @@ namespace HardImpact\Waymaker\Tests\Http\Controllers\temp\Admin\Reports\Financia
 
 use HardImpact\Waymaker\Get;
 
-class RevenueController
+class NsRevenueController
 {
     #[Get]
     public function index()
@@ -87,20 +87,20 @@ class RevenueController
 }
 PHP;
 
-    file_put_contents($deepPath.'/RevenueController.php', $revenueControllerContent);
+    file_put_contents($deepPath.'/NsRevenueController.php', $revenueControllerContent);
 
     $this->setupWaymaker();
 
     $routes = Waymaker::generateRouteDefinitions();
 
-    // Find the routes for the RevenueController
+    // Find the routes for the NsRevenueController
     $indexRoute = null;
     $showRoute = null;
     foreach ($routes as $route) {
-        if (str_contains($route, 'RevenueController') && str_contains($route, 'index')) {
+        if (str_contains($route, 'NsRevenueController') && str_contains($route, 'index')) {
             $indexRoute = $route;
         }
-        if (str_contains($route, 'RevenueController') && str_contains($route, 'show')) {
+        if (str_contains($route, 'NsRevenueController') && str_contains($route, 'show')) {
             $showRoute = $route;
         }
     }
@@ -109,7 +109,7 @@ PHP;
     expect($showRoute)->not->toBeNull();
 
     // The index route name should include the full namespace path
-    expect($indexRoute)->toContain("->name('Admin.Reports.Financial.RevenueController.index')");
+    expect($indexRoute)->toContain("->name('Admin.Reports.Financial.NsRevenueController.index')");
 
     // The show route should use the custom name
     expect($showRoute)->toContain("->name('custom.revenue.show')");

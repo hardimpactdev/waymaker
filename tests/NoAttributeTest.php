@@ -108,7 +108,7 @@ namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
 
 use HardImpact\Waymaker\Get;
 
-class InspectionController
+class AttrInspectionController
 {
     public function __construct(
         private InspectionService $inspectionService
@@ -131,7 +131,7 @@ class InspectionController
 class InspectionService {}
 PHP;
 
-    file_put_contents($this->tempPath.'/InspectionController.php', $controllerContent);
+    file_put_contents($this->tempPath.'/AttrInspectionController.php', $controllerContent);
 
     // Generate routes
     $definitions = Waymaker::generateRouteDefinitions();
@@ -142,10 +142,10 @@ PHP;
     // Debug output
     // echo "\nGenerated routes:\n" . $routesString . "\n\n";
 
-    // Count routes for InspectionController
+    // Count routes for AttrInspectionController
     $routeCount = 0;
     foreach ($definitions as $definition) {
-        if (str_contains($definition, 'InspectionController') && str_contains($definition, 'Route::')) {
+        if (str_contains($definition, 'AttrInspectionController') && str_contains($definition, 'Route::')) {
             $routeCount++;
         }
     }
@@ -157,6 +157,6 @@ PHP;
     expect($routesString)->not->toContain('__construct');
 
     // Assert the correct routes exist
-    expect($routesString)->toContain("Route::get('/inspection', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\InspectionController::class, 'index']");
-    expect($routesString)->toContain("Route::get('/inspection/{id}', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\InspectionController::class, 'show']");
+    expect($routesString)->toContain("Route::get('/attr-inspection', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\AttrInspectionController::class, 'index']");
+    expect($routesString)->toContain("Route::get('/attr-inspection/{id}', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\AttrInspectionController::class, 'show']");
 });

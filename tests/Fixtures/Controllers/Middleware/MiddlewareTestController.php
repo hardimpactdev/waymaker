@@ -1,6 +1,6 @@
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace HardImpact\Waymaker\Tests\Fixtures\Controllers\Middleware;
 
 use HardImpact\Waymaker\Get;
 use HardImpact\Waymaker\Post;

@@ -23,7 +23,7 @@ namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
 
 use HardImpact\Waymaker\Get;
 
-class InspectionController
+class DebugInspectionController
 {
     protected static string $routePrefix = 'inspections';
     
@@ -47,7 +47,7 @@ class InspectionController
 }
 PHP;
 
-    file_put_contents($this->tempPath.'/InspectionController.php', $controller);
+    file_put_contents($this->tempPath.'/DebugInspectionController.php', $controller);
 
     // Generate routes
     $definitions = Waymaker::generateRouteDefinitions();

@@ -93,7 +93,7 @@ PHP;
     $routeIndentations = [];
 
     foreach ($definitions as $line) {
-        if (str_contains($line, '->group(function () {')) {
+        if (str_contains($line, '->group(function (): void {')) {
             $inGroup = true;
             $firstRouteInGroup = true;
         } elseif ($line === '});') {

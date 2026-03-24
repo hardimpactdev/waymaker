@@ -21,7 +21,7 @@ namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
 
 use HardImpact\Waymaker\Get;
 
-class HomeController
+class InvokableHomeController
 {
     #[Get]
     public function __invoke(): \Inertia\Response
@@ -30,11 +30,11 @@ class HomeController
     }
 }
 PHP;
-    file_put_contents($this->tempPath.'/HomeController.php', $controller);
+    file_put_contents($this->tempPath.'/InvokableHomeController.php', $controller);
 
     $routes = Waymaker::generateRouteDefinitions();
 
-    $expectedRoute = "Route::get('/', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\HomeController::class, '__invoke'])->name('HomeController');";
+    $expectedRoute = "Route::get('/', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\InvokableHomeController::class, '__invoke'])->name('InvokableHomeController');";
     expect($routes)->toContain($expectedRoute);
 });
 
@@ -62,7 +62,7 @@ PHP;
     $routes = Waymaker::generateRouteDefinitions();
 
     // Should be in a group with prefix
-    $expectedGroupStart = "Route::prefix('contact')->middleware('guest')->group(function () {";
+    $expectedGroupStart = "Route::prefix('contact')->middleware('guest')->group(function (): void {";
     $expectedRoute = "    Route::get('contact', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\ContactController::class, '__invoke'])->name('ContactController');";
 
     expect($routes)->toContain($expectedGroupStart);
@@ -191,7 +191,7 @@ PHP;
 
     // When both prefix and custom URI are set, it creates a group with prefix
     // and the route uses the custom URI
-    $expectedGroupStart = "Route::prefix('admin')->group(function () {";
+    $expectedGroupStart = "Route::prefix('admin')->group(function (): void {";
     $expectedRoute = "    Route::get('custom-path', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\PrefixedCustomController::class, '__invoke'])->name('PrefixedCustomController');";
 
     expect($routes)->toContain($expectedGroupStart);
@@ -259,7 +259,7 @@ namespace HardImpact\Waymaker\Tests\Http\Controllers\temp\Admin;
 
 use HardImpact\Waymaker\Get;
 
-class DashboardController
+class InvokableDashboardController
 {
     protected static string $routePrefix = 'dashboard';
 
@@ -270,12 +270,12 @@ class DashboardController
     }
 }
 PHP;
-    file_put_contents($subDir.'/DashboardController.php', $controller);
+    file_put_contents($subDir.'/InvokableDashboardController.php', $controller);
 
     $routes = Waymaker::generateRouteDefinitions();
 
-    $expectedGroupStart = "Route::prefix('dashboard')->group(function () {";
-    $expectedRoute = "    Route::get('dashboard', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\Admin\\DashboardController::class, '__invoke'])->name('Admin.DashboardController');";
+    $expectedGroupStart = "Route::prefix('dashboard')->group(function (): void {";
+    $expectedRoute = "    Route::get('dashboard', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\Admin\\InvokableDashboardController::class, '__invoke'])->name('Admin.InvokableDashboardController');";
 
     expect($routes)->toContain($expectedGroupStart);
     expect($routes)->toContain($expectedRoute);
@@ -373,7 +373,7 @@ PHP;
     expect($routes)->toContain("Route::get('/', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\SimpleInvokableController::class, '__invoke'])->name('SimpleInvokableController');");
 
     // Regular controller should be grouped
-    expect($routes)->toContain("Route::prefix('regular')->group(function () {");
+    expect($routes)->toContain("Route::prefix('regular')->group(function (): void {");
     expect($routes)->toContain("    Route::get('', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\RegularController::class, 'index'])->name('RegularController.index');");
     expect($routes)->toContain("    Route::get('{id}', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\RegularController::class, 'show'])->name('RegularController.show');");
 });

@@ -27,7 +27,7 @@ namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
 
 use HardImpact\Waymaker\Get;
 
-class HomeController
+class SubdirHomeController
 {
     #[Get]
     public function index()
@@ -37,7 +37,7 @@ class HomeController
 }
 PHP;
 
-    file_put_contents($this->tempPath.'/HomeController.php', $homeControllerContent);
+    file_put_contents($this->tempPath.'/SubdirHomeController.php', $homeControllerContent);
 
     // Create a controller in the Auth subdirectory
     $loginControllerContent = <<<'PHP'
@@ -75,11 +75,11 @@ PHP;
     // echo "\nGenerated routes:\n" . $routesString . "\n\n";
 
     // Check that both controllers are discovered
-    expect($routesString)->toContain('HomeController');
+    expect($routesString)->toContain('SubdirHomeController');
     expect($routesString)->toContain('Auth\\LoginController');
 
-    // Check specific routes (note: HomeController generates /home not / by default)
-    expect($routesString)->toContain("Route::get('/home', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\HomeController::class, 'index'])");
+    // Check specific routes (note: SubdirHomeController generates /home not / by default)
+    expect($routesString)->toContain("Route::get('/subdir-home', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\SubdirHomeController::class, 'index'])");
     expect($routesString)->toContain("Route::get('/login/login', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\Auth\\LoginController::class, 'showLoginForm'])");
     expect($routesString)->toContain("Route::post('/login/login', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\Auth\\LoginController::class, 'login'])");
 });
@@ -98,7 +98,7 @@ namespace HardImpact\Waymaker\Tests\Http\Controllers\temp\Settings;
 use HardImpact\Waymaker\Get;
 use HardImpact\Waymaker\Put;
 
-class ProfileController
+class SubdirProfileController
 {
     protected static array $routeMiddleware = ['auth'];
     
@@ -116,25 +116,27 @@ class ProfileController
 }
 PHP;
 
-    file_put_contents($settingsPath.'/ProfileController.php', $profileControllerContent);
+    file_put_contents($settingsPath.'/SubdirProfileController.php', $profileControllerContent);
 
     $this->setupWaymaker();
 
     $routes = Waymaker::generateRouteDefinitions();
 
-    // Find routes for the ProfileController
+    // Find routes for the SubdirProfileController
     $profileRoutes = array_filter($routes, function ($route) {
-        return str_contains($route, 'ProfileController');
+        return str_contains($route, 'SubdirProfileController');
     });
 
     expect($profileRoutes)->not->toBeEmpty();
 
     foreach ($profileRoutes as $route) {
         // Check that the fully qualified class name includes the subdirectory
-        expect($route)->toContain('\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\Settings\\ProfileController');
-        // Check that middleware is applied
-        expect($route)->toContain("->middleware('auth')");
+        expect($route)->toContain('\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\Settings\\SubdirProfileController');
     }
+
+    // Check that middleware is applied at the group level
+    $routesString = implode("\n", $routes);
+    expect($routesString)->toContain("Route::middleware('auth')->group(function (): void {");
 });
 
 test('it handles deeply nested controller directories', function () {
@@ -150,7 +152,7 @@ namespace HardImpact\Waymaker\Tests\Http\Controllers\temp\Admin\Reports\Financia
 
 use HardImpact\Waymaker\Get;
 
-class RevenueController
+class SubdirRevenueController
 {
     protected static string $routePrefix = 'admin/reports/financial/revenue';
     
@@ -174,7 +176,7 @@ class RevenueController
 }
 PHP;
 
-    file_put_contents($deepPath.'/RevenueController.php', $revenueControllerContent);
+    file_put_contents($deepPath.'/SubdirRevenueController.php', $revenueControllerContent);
 
     $this->setupWaymaker();
 
@@ -185,7 +187,9 @@ PHP;
     // echo "\nGenerated routes:\n" . $routesString . "\n\n";
 
     // Check that the deeply nested controller is discovered
-    expect($routesString)->toContain('Admin\\Reports\\Financial\\RevenueController');
-    expect($routesString)->toContain('/admin/reports/financial/revenue');
-    expect($routesString)->toContain("Route::get('/admin/reports/financial/revenue/monthly'");
+    expect($routesString)->toContain('Admin\\Reports\\Financial\\SubdirRevenueController');
+    // Routes are grouped by prefix, so the prefix appears in the group statement
+    expect($routesString)->toContain("Route::prefix('admin/reports/financial/revenue')");
+    // Within the group, URIs are relative (prefix first segment stripped)
+    expect($routesString)->toContain("'reports/financial/revenue/monthly'");
 });

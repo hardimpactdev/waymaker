@@ -1,6 +1,6 @@
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace HardImpact\Waymaker\Tests\Fixtures\Controllers\RouteGeneration;
 
 use HardImpact\Waymaker\Get;
 use Illuminate\Routing\Controller;

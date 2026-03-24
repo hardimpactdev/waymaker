@@ -27,7 +27,7 @@ namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
 use HardImpact\Waymaker\Get;
 use HardImpact\Waymaker\Post;
 
-class DashboardController
+class NoGroupDashboardController
 {
     #[Get(uri: '/', middleware: ['auth', 'active'])]
     public function show()
@@ -43,7 +43,7 @@ class DashboardController
 }
 PHP;
 
-    file_put_contents($this->tempPath.'/DashboardController.php', $controller);
+    file_put_contents($this->tempPath.'/NoGroupDashboardController.php', $controller);
 
     // Generate routes
     $definitions = Waymaker::generateRouteDefinitions();
@@ -57,7 +57,7 @@ PHP;
     echo "=== End Routes ===\n";
 
     // Find the dashboard routes
-    $dashboardRoutes = array_filter($definitions, fn ($line) => str_contains($line, 'DashboardController'));
+    $dashboardRoutes = array_filter($definitions, fn ($line) => str_contains($line, 'NoGroupDashboardController'));
 
     expect(count($dashboardRoutes))->toBe(2);
 
@@ -109,7 +109,7 @@ namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
 
 use HardImpact\Waymaker\Get;
 
-class PublicController
+class NoGroupPublicController
 {
     #[Get(uri: '/')]
     public function home()
@@ -120,7 +120,7 @@ class PublicController
 PHP;
 
     file_put_contents($this->tempPath.'/GroupedController.php', $controller1);
-    file_put_contents($this->tempPath.'/PublicController.php', $controller2);
+    file_put_contents($this->tempPath.'/NoGroupPublicController.php', $controller2);
 
     // Generate routes
     $definitions = Waymaker::generateRouteDefinitions();
@@ -141,7 +141,7 @@ PHP;
     // Check non-grouped route has NO indentation
     $publicRoute = null;
     foreach ($definitions as $line) {
-        if (str_contains($line, 'PublicController')) {
+        if (str_contains($line, 'NoGroupPublicController')) {
             $publicRoute = $line;
             break;
         }
