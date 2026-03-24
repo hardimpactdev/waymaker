@@ -98,13 +98,6 @@ PHP;
         }
     }
 
-    echo "\n=== Route URIs in order ===\n";
-    foreach ($routeUris as $index => $uri) {
-        $depth = empty($uri) ? 1 : substr_count($uri, '/') + 1;
-        echo "{$index}: '{$uri}' (depth: {$depth})\n";
-    }
-    echo "=== End URIs ===\n";
-
     // Expected order by depth:
     // 1. '' (depth 1)
     // 2. 'create' (depth 2, static)

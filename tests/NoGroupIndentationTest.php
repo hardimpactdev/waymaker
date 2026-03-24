@@ -48,14 +48,6 @@ PHP;
     // Generate routes
     $definitions = Waymaker::generateRouteDefinitions();
 
-    // Display all lines with visible whitespace
-    echo "\n=== Generated Routes ===\n";
-    foreach ($definitions as $line) {
-        $visibleLine = str_replace(' ', '·', $line);
-        echo $visibleLine."\n";
-    }
-    echo "=== End Routes ===\n";
-
     // Find the dashboard routes
     $dashboardRoutes = array_filter($definitions, fn ($line) => str_contains($line, 'NoGroupDashboardController'));
 
@@ -66,9 +58,6 @@ PHP;
         // Get the leading whitespace
         preg_match('/^(\s*)/', $route, $matches);
         $indent = $matches[1];
-
-        echo "\nChecking route: ".str_replace(' ', '·', $route)."\n";
-        echo 'Indent length: '.strlen($indent)."\n";
 
         // Should have no indentation
         expect(strlen($indent))->toBe(0);

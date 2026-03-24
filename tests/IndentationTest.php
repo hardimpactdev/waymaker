@@ -82,14 +82,6 @@ PHP;
         expect($indent)->not->toBe('        ');
     }
 
-    // Also check the raw output
-    echo "\n=== Generated Routes ===\n";
-    foreach ($definitions as $line) {
-        // Show the line with visible spaces
-        $visibleLine = str_replace(' ', '·', $line);
-        echo $visibleLine."\n";
-    }
-    echo "=== End Routes ===\n";
 });
 
 /**

@@ -93,9 +93,6 @@ PHP;
     // Convert to string
     $routesString = implode("\n", $definitions);
 
-    // Debug output
-    echo "\nGenerated routes:\n".$routesString."\n\n";
-
     // Check for proper grouping format
     expect($routesString)->toContain("Route::prefix('inspections')->middleware(['auth', 'active'])->group(function (): void {");
 

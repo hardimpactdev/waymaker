@@ -52,18 +52,8 @@ PHP;
     // Generate routes
     $definitions = Waymaker::generateRouteDefinitions();
 
-    echo "\n=== All Generated Definitions ===\n";
-    foreach ($definitions as $index => $line) {
-        echo "{$index}: {$line}\n";
-    }
-    echo "=== End Definitions ===\n";
-
     // Filter to route lines only
     $routeLines = array_filter($definitions, fn ($line) => str_contains($line, 'Route::') && ! str_contains($line, 'Route::prefix'));
 
-    echo "\n=== Route Lines Only ===\n";
-    foreach ($routeLines as $line) {
-        echo $line."\n";
-    }
-    echo "=== End Route Lines ===\n";
+    expect($routeLines)->not->toBeEmpty();
 });

@@ -60,14 +60,7 @@ PHP;
     // Read the generated file
     $generatedContent = File::get(base_path('routes/waymaker.php'));
 
-    // Display the content with visible whitespace
-    echo "\n=== Generated File Content (with visible spaces) ===\n";
     $lines = explode("\n", $generatedContent);
-    foreach ($lines as $line) {
-        $visibleLine = str_replace(' ', '·', $line);
-        echo $visibleLine."\n";
-    }
-    echo "=== End Content ===\n";
 
     // Check for correct indentation
     $routeLines = array_filter($lines, fn ($line) => str_contains($line, 'Route::get') || str_contains($line, 'Route::post'));

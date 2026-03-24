@@ -66,37 +66,4 @@ PHP;
     $tabCount = substr_count($generatedContent, "\t");
     expect($tabCount)->toBe(0);
 
-    // Display any lines that might contain tabs
-    $lines = explode("\n", $generatedContent);
-    foreach ($lines as $lineNum => $line) {
-        if (str_contains($line, "\t")) {
-            $visibleLine = str_replace("\t", '<TAB>', $line);
-            echo "Line {$lineNum}: {$visibleLine}\n";
-        }
-    }
-
-    // Also check the raw bytes of the first route line
-    $routeLines = array_filter($lines, fn ($line) => str_contains($line, 'Route::get') || str_contains($line, 'Route::post'));
-    if (! empty($routeLines)) {
-        $firstRouteLine = reset($routeLines);
-        echo "\nFirst route line analysis:\n";
-        echo 'Raw: '.json_encode($firstRouteLine)."\n";
-
-        // Check first 8 characters
-        $first8 = substr($firstRouteLine, 0, 8);
-        echo 'First 8 chars: '.json_encode($first8)."\n";
-        echo 'First 8 bytes: ';
-        for ($i = 0; $i < strlen($first8); $i++) {
-            echo ord($first8[$i]).' ';
-        }
-        echo "\n";
-
-        // Space is ASCII 32, Tab is ASCII 9
-        for ($i = 0; $i < strlen($first8); $i++) {
-            $char = $first8[$i];
-            if (ord($char) === 9) {
-                echo "Found TAB at position {$i}\n";
-            }
-        }
-    }
 });

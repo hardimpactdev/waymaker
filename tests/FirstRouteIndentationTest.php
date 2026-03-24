@@ -78,15 +78,6 @@ PHP;
     // Generate routes
     $definitions = Waymaker::generateRouteDefinitions();
 
-    // Display all lines with line numbers and visible whitespace
-    echo "\n=== All Generated Routes ===\n";
-    foreach ($definitions as $index => $line) {
-        $lineNum = str_pad($index + 1, 3, ' ', STR_PAD_LEFT);
-        $visibleLine = str_replace(' ', '·', $line);
-        echo "{$lineNum}: {$visibleLine}\n";
-    }
-    echo "=== End Routes ===\n";
-
     // Find all route lines within groups
     $inGroup = false;
     $firstRouteInGroup = true;
@@ -124,7 +115,6 @@ PHP;
 
         // Specifically check that first routes don't have different indentation
         if ($route['is_first']) {
-            echo "\nFirst route in group: ".str_replace(' ', '·', $route['line'])."\n";
             expect($route['indent'])->toBe($expectedIndent);
         }
     }
@@ -173,8 +163,6 @@ PHP;
     // Check indentation
     preg_match('/^(\s*)/', $routeLine, $matches);
     $indent = $matches[1];
-
-    echo "\nSingle route: ".str_replace(' ', '·', $routeLine)."\n";
 
     expect(strlen($indent))->toBe(4);
     expect($indent)->toBe('    ');
