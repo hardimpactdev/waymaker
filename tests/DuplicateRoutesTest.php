@@ -65,7 +65,7 @@ PHP;
     // Generating routes should throw an exception due to duplicates
     expect(fn () => Waymaker::generateRouteDefinitions())
         ->toThrow(
-            \RuntimeException::class,
+            RuntimeException::class,
             'Duplicate route detected: get /inspections'
         );
 });
