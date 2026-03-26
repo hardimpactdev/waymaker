@@ -354,20 +354,17 @@ class Waymaker
             $baseUri = '/'.self::getControllerBaseName($controllerName);
         }
 
-        // If custom URI is provided, append it to the base URI
+        // If custom URI is provided, use it
         if ($customUri !== null) {
-            // Special case: if custom URI is exactly '/', use root
             if ($customUri === '/') {
                 $uri = '/';
+            } elseif (! $prefix && str_starts_with($customUri, '/')) {
+                // Absolute URI (starts with /) without a prefix — use as-is
+                $uri = $customUri;
             } else {
-                // Remove leading slash from custom URI to avoid double slashes
+                // Relative URI or prefixed controller — append to base
                 $customUri = ltrim($customUri, '/');
-                // If custom URI is empty after trimming, use the base URI
-                if ($customUri === '') {
-                    $uri = $baseUri;
-                } else {
-                    $uri = rtrim($baseUri, '/').'/'.$customUri;
-                }
+                $uri = rtrim($baseUri, '/').'/'.$customUri;
             }
 
             // Don't apply any additional conventions when custom URI is provided
