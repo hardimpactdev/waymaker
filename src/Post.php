@@ -9,10 +9,11 @@ use HardImpact\Waymaker\Enums\HttpMethod;
 class Post extends RouteAttribute
 {
     public function __construct(
-        public ?string $uri = null,
-        public ?string $name = null,
-        public ?array $parameters = null,
-        public array|string|null $middleware = null,
+        ?string $uri = null,
+        ?string $name = null,
+        ?array $parameters = null,
+        array|string|null $middleware = null,
+        ?string $middlewareGroup = null,
     ) {
         $this->method = HttpMethod::POST;
         parent::__construct(
@@ -20,6 +21,7 @@ class Post extends RouteAttribute
             $name,
             $parameters,
             $middleware,
+            $middlewareGroup,
         );
     }
 }

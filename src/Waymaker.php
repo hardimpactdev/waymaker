@@ -144,6 +144,14 @@ class Waymaker
                 $controllerMiddleware = is_array($middlewareValue) ? $middlewareValue : [$middlewareValue];
             }
 
+            $controllerMiddlewareGroup = null;
+            if ($reflection->hasProperty('middlewareGroup')) {
+                $groupValue = $reflection->getStaticPropertyValue('middlewareGroup');
+                $controllerMiddlewareGroup = is_string($groupValue) && $groupValue !== ''
+                    ? $groupValue
+                    : null;
+            }
+
             // Get all public methods from the controller
             $methods = $reflection->getMethods(ReflectionMethod::IS_PUBLIC);
             $controllerMethods = [];
@@ -157,7 +165,16 @@ class Waymaker
 
             // Process each controller method
             foreach ($controllerMethods as $method) {
-                self::processControllerMethod($method, $reflection, $class, $controllerMiddleware, $routePrefix, $groupedRoutes, $routeRegistry);
+                self::processControllerMethod(
+                    $method,
+                    $reflection,
+                    $class,
+                    $controllerMiddleware,
+                    $controllerMiddlewareGroup,
+                    $routePrefix,
+                    $groupedRoutes,
+                    $routeRegistry,
+                );
             }
         } catch (ReflectionException $e) {
             Log::error("Failed to reflect class {$class}: {$e->getMessage()}");
@@ -171,6 +188,7 @@ class Waymaker
      * @param  ReflectionClass  $reflection  The reflection class
      * @param  string  $class  The fully qualified controller class name
      * @param  array<string>  $controllerMiddleware  The controller middleware
+     * @param  string|null  $controllerMiddlewareGroup  The controller middleware group (e.g. web, static)
      * @param  string|null  $routePrefix  The route prefix
      * @param  array<string, array<string, mixed>>  &$groupedRoutes  Reference to the grouped routes array
      * @param  array<string, array<string, mixed>>  &$routeRegistry  Reference to the route registry
@@ -180,6 +198,7 @@ class Waymaker
         ReflectionClass $reflection,
         string $class,
         array $controllerMiddleware,
+        ?string $controllerMiddlewareGroup,
         ?string $routePrefix,
         array &$groupedRoutes,
         array &$routeRegistry
@@ -215,6 +234,9 @@ class Waymaker
         if ($routeAttr->middleware !== null) {
             $routeMiddleware = is_string($routeAttr->middleware) ? [$routeAttr->middleware] : $routeAttr->middleware;
         }
+
+        // Attribute middleware group wins over controller default
+        $middlewareGroup = $routeAttr->middlewareGroup ?? $controllerMiddlewareGroup;
 
         // Combine middleware, removing duplicates
         $combinedMiddleware = array_values(array_unique(array_merge($controllerMiddleware, $routeMiddleware)));
@@ -256,16 +278,18 @@ class Waymaker
             'middleware' => $combinedMiddleware,
             'routeMiddleware' => $routeMiddleware, // Keep track of route-specific middleware
             'controllerMiddleware' => $controllerMiddleware, // Keep track of controller middleware
+            'middlewareGroup' => $middlewareGroup,
         ];
 
-        // Group routes by prefix and middleware for organization
-        $groupKey = self::generateGroupKey($routePrefix, $controllerMiddleware);
+        // Group routes by middleware group, prefix, and controller middleware
+        $groupKey = self::generateGroupKey($routePrefix, $controllerMiddleware, $middlewareGroup);
 
         // Initialize the group if it doesn't exist
         if (! isset($groupedRoutes[$groupKey])) {
             $groupedRoutes[$groupKey] = [
                 'prefix' => $routePrefix,
                 'middleware' => $controllerMiddleware,
+                'middlewareGroup' => $middlewareGroup,
                 'routes' => [],
             ];
         }
@@ -275,18 +299,20 @@ class Waymaker
     }
 
     /**
-     * Generate a unique group key based on prefix and middleware.
+     * Generate a unique group key based on middleware group, prefix, and middleware.
      *
      * @param  string|null  $prefix  The route prefix
      * @param  array<string>  $middleware  The middleware array
+     * @param  string|null  $middlewareGroup  The middleware group name (e.g. web, static)
      * @return string The group key
      */
-    private static function generateGroupKey(?string $prefix, array $middleware): string
+    private static function generateGroupKey(?string $prefix, array $middleware, ?string $middlewareGroup = null): string
     {
         $prefix = $prefix ?? '/';
         $middlewareKey = empty($middleware) ? 'none' : implode(',', $middleware);
+        $groupKey = $middlewareGroup ?? 'inherit';
 
-        return $prefix.'::'.$middlewareKey;
+        return $groupKey.'::'.$prefix.'::'.$middlewareKey;
     }
 
     /**
@@ -452,22 +478,31 @@ class Waymaker
             $prefix = $group['prefix'] ?? null;
             /** @var array<string> $middleware */
             $middleware = $group['middleware'] ?? [];
+            /** @var string|null $middlewareGroup */
+            $middlewareGroup = $group['middlewareGroup'] ?? null;
             /** @var array<array<string, mixed>> $routes */
             $routes = $group['routes'] ?? [];
 
             // Sort routes within the group by specificity
             $sortedRoutes = self::sortRoutesBySpecificity($routes);
 
+            // Middleware stack applied at the group level: named group first, then extras
+            $groupMiddleware = $middleware;
+            if (is_string($middlewareGroup) && $middlewareGroup !== '') {
+                array_unshift($groupMiddleware, $middlewareGroup);
+                $groupMiddleware = array_values(array_unique($groupMiddleware));
+            }
+
             // Check if we need a group
-            $hasGroup = $prefix !== null || ! empty($middleware);
+            $hasGroup = $prefix !== null || ! empty($groupMiddleware);
 
             // Generate the group based on what we have
-            if ($prefix !== null && ! empty($middleware)) {
+            if ($prefix !== null && ! empty($groupMiddleware)) {
                 // Both prefix and middleware
                 $flattened[] = sprintf(
                     "Route::prefix('%s')->middleware(%s)->group(function (): void {",
                     trim($prefix, '/'),
-                    self::formatMiddleware($middleware)
+                    self::formatMiddleware($groupMiddleware)
                 );
             } elseif ($prefix !== null) {
                 // Only prefix
@@ -475,11 +510,11 @@ class Waymaker
                     "Route::prefix('%s')->group(function (): void {",
                     trim($prefix, '/')
                 );
-            } elseif (! empty($middleware)) {
-                // Only middleware
+            } elseif (! empty($groupMiddleware)) {
+                // Only middleware / middleware group
                 $flattened[] = sprintf(
                     'Route::middleware(%s)->group(function (): void {',
-                    self::formatMiddleware($middleware)
+                    self::formatMiddleware($groupMiddleware)
                 );
             }
 

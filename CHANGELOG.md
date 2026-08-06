@@ -2,6 +2,12 @@
 
 All notable changes to `waymaker` will be documented in this file.
 
+## Unreleased
+
+### Added
+
+- `middlewareGroup` on route attributes (`Get`, `Post`, `Put`, `Patch`, `Delete`) and controller `public static string $middlewareGroup` so routes can target named stacks like `static` or `web` without a separate routes file (Cloudflare / edge-cache friendly).
+
 ## v0.2.0 - Invokable Controller Support - 2026-01-30
 
 ### What's New

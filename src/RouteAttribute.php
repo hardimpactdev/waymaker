@@ -13,5 +13,6 @@ abstract class RouteAttribute
         public ?string $name = null,
         public ?array $parameters = null,
         public array|string|null $middleware = null,
+        public ?string $middlewareGroup = null,
     ) {}
 }

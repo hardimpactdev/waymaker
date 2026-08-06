@@ -137,9 +137,72 @@ Each attribute supports the following properties:
 - `uri` - Custom URI path (optional, appended to base/prefix)
 - `name` - Custom route name (optional)
 - `parameters` - Route parameters array (optional)
-- `middleware` - Route-specific middleware (optional)
+- `middleware` - Route-specific middleware (optional, applied on the individual route)
+- `middlewareGroup` - Named middleware **group** for the route (optional, e.g. `web`, `static`, `api`)
 
 **Note:** Methods without a route attribute will not generate any routes.
+
+### Middleware groups (e.g. Cloudflare / cookie-free pages)
+
+Use a **middleware group** when routes must not sit on the default `web` stack (sessions, CSRF cookies). This is required for edge HTML caching (Cloudflare): responses with `Set-Cookie` are not cacheable.
+
+Controller-wide:
+
+```php
+class ProjectsController extends Controller
+{
+    public static string $middlewareGroup = 'static';
+
+    // Optional extra middleware applied with the group
+    public static array $routeMiddleware = ['cloudflare.cache'];
+
+    #[Get(uri: '/', name: 'projects')]
+    public function index(): Response { ... }
+}
+```
+
+Per route (overrides the controller default):
+
+```php
+#[Get(uri: '/pricing', name: 'pricing', middlewareGroup: 'static')]
+public function pricing(): Response { ... }
+
+#[Get(uri: '/dashboard', name: 'dashboard', middlewareGroup: 'web', middleware: 'auth')]
+public function dashboard(): Response { ... }
+```
+
+Generated output looks like:
+
+```php
+Route::middleware(['static', 'cloudflare.cache'])->group(function (): void {
+    Route::get('/', [...])->name('projects');
+});
+```
+
+**Important:** if you register `Waymaker::routes()` inside Laravel’s `web` routes file, a `static` group is still nested under `web` (session cookies remain). Load Waymaker from `then:` so groups are top-level:
+
+```php
+// bootstrap/app.php
+return Application::configure(basePath: dirname(__DIR__))
+    ->withRouting(
+        web: __DIR__.'/../routes/web.php', // Fortify / other non-Waymaker web routes if needed
+        commands: __DIR__.'/../routes/console.php',
+        health: '/up',
+        then: function () {
+            Waymaker::routes(); // applies middleware groups without wrapping in web
+        },
+    )
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->group('static', [
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\HandleInertiaRequests::class,
+            \HardImpact\CloudflareCache\Http\Middleware\CacheResponse::class,
+        ]);
+    })
+    ->create();
+```
+
+Define `static` however you like; for Cloudflare HTML caching it must **not** include `StartSession` / cookie encryption that queues `Set-Cookie`.
 
 #### Examples
 
@@ -174,13 +237,14 @@ class ArticleController extends Controller
 }
 ```
 
-Other route properties are also supported like `middleware`. Besides setting middleware on specific methods you can also set them at the controller level, just as a prefix:
+Other route properties are also supported like `middleware`. Besides setting middleware on specific methods you can also set them at the controller level, just as a prefix or middleware group:
 
 ```php
 class ArticleController extends Controller
 {
     protected static string $routePrefix = 'articles';
-    protected static string $routeMiddleware = 'auth:verified';
+    protected static array $routeMiddleware = ['auth', 'verified'];
+    // public static string $middlewareGroup = 'web'; // optional named group
 
     ...
 ```

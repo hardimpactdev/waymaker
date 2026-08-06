@@ -13,6 +13,7 @@ class Get extends RouteAttribute
         ?string $name = null,
         ?array $parameters = null,
         array|string|null $middleware = null,
+        ?string $middlewareGroup = null,
     ) {
         $this->method = HttpMethod::GET;
         parent::__construct(
@@ -20,6 +21,7 @@ class Get extends RouteAttribute
             $name,
             $parameters,
             $middleware,
+            $middlewareGroup,
         );
     }
 }
