@@ -1,6 +1,6 @@
 <?php
 
-use HardImpact\Waymaker\Tests\Traits\TestFixtures;
+use NckRtl\Waymaker\Tests\Traits\TestFixtures;
 use Illuminate\Support\Facades\File;
 
 uses(TestFixtures::class);
@@ -26,10 +26,10 @@ test('waymaker command generates routes file with correct indentation', function
     $controller = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
-use HardImpact\Waymaker\Post;
+use NckRtl\Waymaker\Get;
+use NckRtl\Waymaker\Post;
 
 class CommandTestController
 {

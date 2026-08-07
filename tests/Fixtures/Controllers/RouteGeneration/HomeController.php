@@ -1,6 +1,6 @@
 <?php
 
-namespace HardImpact\Waymaker\Tests\Fixtures\Controllers\RouteGeneration;
+namespace NckRtl\Waymaker\Tests\Fixtures\Controllers\RouteGeneration;
 
 use Illuminate\Routing\Controller;
 use Inertia\Response;

@@ -1,7 +1,7 @@
 <?php
 
-use HardImpact\Waymaker\Tests\Traits\TestFixtures;
-use HardImpact\Waymaker\Waymaker;
+use NckRtl\Waymaker\Tests\Traits\TestFixtures;
+use NckRtl\Waymaker\Waymaker;
 
 uses(TestFixtures::class);
 
@@ -20,18 +20,18 @@ test('it generates correct route definitions from controllers', function () {
     // Use the permanent fixture for this test
     Waymaker::setControllerPath(
         __DIR__.'/Http/Controllers',
-        'HardImpact\\Waymaker\\Tests\\Http\\Controllers'
+        'NckRtl\\Waymaker\\Tests\\Http\\Controllers'
     );
 
     $routes = Waymaker::generateRouteDefinitions();
 
     // The routes should be within a group with prefix and middleware
     $expectedGroupStart = "Route::prefix('articles')->middleware(['auth', 'verified'])->group(function (): void {";
-    $expectedShowRoute = "Route::get('{article:slug}', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\ArticleController::class, 'show'])->name('ArticleController.show');";
-    $expectedStoreRoute = "Route::post('', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\ArticleController::class, 'store'])->name('ArticleController.store');";
-    $expectedUpdateRoute = "Route::put('{article:slug}', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\ArticleController::class, 'update'])->name('ArticleController.update');";
-    $expectedEditRoute = "Route::patch('{article:slug}', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\ArticleController::class, 'edit'])->name('ArticleController.edit');";
-    $expectedDestroyRoute = "Route::delete('{article:slug}', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\ArticleController::class, 'destroy'])->name('ArticleController.destroy');";
+    $expectedShowRoute = "Route::get('{article:slug}', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\ArticleController::class, 'show'])->name('ArticleController.show');";
+    $expectedStoreRoute = "Route::post('', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\ArticleController::class, 'store'])->name('ArticleController.store');";
+    $expectedUpdateRoute = "Route::put('{article:slug}', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\ArticleController::class, 'update'])->name('ArticleController.update');";
+    $expectedEditRoute = "Route::patch('{article:slug}', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\ArticleController::class, 'edit'])->name('ArticleController.edit');";
+    $expectedDestroyRoute = "Route::delete('{article:slug}', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\ArticleController::class, 'destroy'])->name('ArticleController.destroy');";
 
     expect($routes)->toContain($expectedGroupStart);
     expect($routes)->toContain('    '.$expectedShowRoute);

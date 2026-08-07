@@ -1,7 +1,7 @@
 <?php
 
-use HardImpact\Waymaker\Tests\Traits\TestFixtures;
-use HardImpact\Waymaker\Waymaker;
+use NckRtl\Waymaker\Tests\Traits\TestFixtures;
+use NckRtl\Waymaker\Waymaker;
 
 uses(TestFixtures::class);
 
@@ -22,9 +22,9 @@ test('first route in group has same indentation as other routes', function () {
     $controller1 = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class AFirstController
 {
@@ -42,10 +42,10 @@ PHP;
     $controller2 = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
-use HardImpact\Waymaker\Post;
+use NckRtl\Waymaker\Get;
+use NckRtl\Waymaker\Post;
 
 class BSecondController
 {
@@ -127,9 +127,9 @@ test('single route in group has correct indentation', function () {
     $controller = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class SingleRouteController
 {

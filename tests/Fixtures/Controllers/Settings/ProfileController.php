@@ -2,7 +2,7 @@
 
 namespace Tests\Fixtures\Controllers\Settings;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 

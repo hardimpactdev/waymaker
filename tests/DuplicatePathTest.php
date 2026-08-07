@@ -1,7 +1,7 @@
 <?php
 
-use HardImpact\Waymaker\Tests\Traits\TestFixtures;
-use HardImpact\Waymaker\Waymaker;
+use NckRtl\Waymaker\Tests\Traits\TestFixtures;
+use NckRtl\Waymaker\Waymaker;
 
 uses(TestFixtures::class);
 
@@ -18,9 +18,9 @@ test('single segment controller without prefix does not duplicate path', functio
     $controllerCode = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Post;
+use NckRtl\Waymaker\Post;
 use Illuminate\Http\Request;
 
 class ChangeLanguageController
@@ -58,9 +58,9 @@ test('multi segment controller without prefix does not duplicate path', function
     $controllerCode = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class UserProfileController
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace HardImpact\Waymaker\Database\Factories;
+namespace NckRtl\Waymaker\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 

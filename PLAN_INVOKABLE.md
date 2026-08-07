@@ -142,7 +142,7 @@ private static function isInvokableController(ReflectionClass $reflection): bool
 <?php
 namespace App\Http\Controllers;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class HomeController extends Controller
 {
@@ -164,7 +164,7 @@ Route::get('/', [\App\Http\Controllers\HomeController::class, '__invoke'])->name
 <?php
 namespace App\Http\Controllers;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class ContactController extends Controller
 {
@@ -191,7 +191,7 @@ Route::prefix('contact')->middleware('guest')->group(function () {
 <?php
 namespace App\Http\Controllers;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class AboutController extends Controller
 {
@@ -213,7 +213,7 @@ Route::get('about-us', [\App\Http\Controllers\AboutController::class, '__invoke'
 <?php
 namespace App\Http\Controllers\Admin\Settings;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class ProfileController extends Controller
 {

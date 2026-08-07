@@ -1,7 +1,7 @@
 <?php
 
-use HardImpact\Waymaker\Tests\Traits\TestFixtures;
-use HardImpact\Waymaker\Waymaker;
+use NckRtl\Waymaker\Tests\Traits\TestFixtures;
+use NckRtl\Waymaker\Waymaker;
 
 uses(TestFixtures::class);
 
@@ -22,10 +22,10 @@ test('routes without prefix or middleware have no indentation', function () {
     $controller = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
-use HardImpact\Waymaker\Post;
+use NckRtl\Waymaker\Get;
+use NckRtl\Waymaker\Post;
 
 class NoGroupDashboardController
 {
@@ -73,9 +73,9 @@ test('mixed grouped and non-grouped routes have correct indentation', function (
     $controller1 = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class GroupedController
 {
@@ -94,9 +94,9 @@ PHP;
     $controller2 = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class NoGroupPublicController
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace HardImpact\Waymaker\Tests\Factories;
+namespace NckRtl\Waymaker\Tests\Factories;
 
-use HardImpact\Waymaker\Enums\HttpMethod;
+use NckRtl\Waymaker\Enums\HttpMethod;
 use Illuminate\Support\Facades\File;
 
 class ControllerFactory
 {
-    private string $namespace = 'HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp';
+    private string $namespace = 'NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp';
 
     private string $className;
 
@@ -94,8 +94,8 @@ class ControllerFactory
         $code .= "namespace {$this->namespace};\n\n";
         $code .= "use Illuminate\\Routing\\Controller;\n";
         $code .= "use Inertia\\Response;\n";
-        $code .= "use HardImpact\\Waymaker\\{Delete, Get, Patch, Post, Put};\n";
-        $code .= "use HardImpact\\Waymaker\\Enums\\HttpMethod;\n\n";
+        $code .= "use NckRtl\\Waymaker\\{Delete, Get, Patch, Post, Put};\n";
+        $code .= "use NckRtl\\Waymaker\\Enums\\HttpMethod;\n\n";
 
         $code .= "class {$this->className} extends Controller\n{\n";
 

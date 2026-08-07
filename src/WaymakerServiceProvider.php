@@ -1,8 +1,8 @@
 <?php
 
-namespace HardImpact\Waymaker;
+namespace NckRtl\Waymaker;
 
-use HardImpact\Waymaker\Commands\WaymakerCommand;
+use NckRtl\Waymaker\Commands\WaymakerCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 

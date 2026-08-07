@@ -1,12 +1,12 @@
 <?php
 
-namespace HardImpact\Waymaker\Tests\Fixtures\Controllers\RouteGeneration;
+namespace NckRtl\Waymaker\Tests\Fixtures\Controllers\RouteGeneration;
 
-use HardImpact\Waymaker\Delete;
-use HardImpact\Waymaker\Get;
-use HardImpact\Waymaker\Patch;
-use HardImpact\Waymaker\Post;
-use HardImpact\Waymaker\Put;
+use NckRtl\Waymaker\Delete;
+use NckRtl\Waymaker\Get;
+use NckRtl\Waymaker\Patch;
+use NckRtl\Waymaker\Post;
+use NckRtl\Waymaker\Put;
 use Illuminate\Routing\Controller;
 use Inertia\Response;
 

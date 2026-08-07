@@ -1,8 +1,8 @@
 <?php
 
-namespace HardImpact\Waymaker\Commands;
+namespace NckRtl\Waymaker\Commands;
 
-use HardImpact\Waymaker\Waymaker;
+use NckRtl\Waymaker\Waymaker;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 

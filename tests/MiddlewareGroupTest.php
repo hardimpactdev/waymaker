@@ -1,7 +1,7 @@
 <?php
 
-use HardImpact\Waymaker\Tests\Traits\TestFixtures;
-use HardImpact\Waymaker\Waymaker;
+use NckRtl\Waymaker\Tests\Traits\TestFixtures;
+use NckRtl\Waymaker\Waymaker;
 use Illuminate\Support\Facades\File;
 
 uses(TestFixtures::class);
@@ -18,9 +18,9 @@ test('it generates routes with a controller middleware group', function () {
     $content = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class StaticPageController
 {
@@ -42,7 +42,7 @@ PHP;
 
     File::put($this->tempPath.'/StaticPageController.php', $content);
 
-    Waymaker::setControllerPath($this->tempPath, 'HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp');
+    Waymaker::setControllerPath($this->tempPath, 'NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp');
     $definitions = Waymaker::generateRouteDefinitions();
     $routesString = implode("\n", $definitions);
 
@@ -55,9 +55,9 @@ test('it allows per-route middleware group override', function () {
     $content = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class MixedGroupController
 {
@@ -79,7 +79,7 @@ PHP;
 
     File::put($this->tempPath.'/MixedGroupController.php', $content);
 
-    Waymaker::setControllerPath($this->tempPath, 'HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp');
+    Waymaker::setControllerPath($this->tempPath, 'NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp');
     $definitions = Waymaker::generateRouteDefinitions();
     $routesString = implode("\n", $definitions);
 
@@ -93,9 +93,9 @@ test('it combines middleware group with controller and route middleware', functi
     $content = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class CachedPageController
 {
@@ -113,7 +113,7 @@ PHP;
 
     File::put($this->tempPath.'/CachedPageController.php', $content);
 
-    Waymaker::setControllerPath($this->tempPath, 'HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp');
+    Waymaker::setControllerPath($this->tempPath, 'NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp');
     $definitions = Waymaker::generateRouteDefinitions();
     $routesString = implode("\n", $definitions);
 

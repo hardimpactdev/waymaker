@@ -45,7 +45,7 @@ export default defineConfig({
 Next, update your main routes file to include the generated routes with:
 
 ```php
-use HardImpact\Waymaker\Facades\Waymaker;
+use NckRtl\Waymaker\Facades\Waymaker;
 
 Waymaker::routes();
 ```
@@ -65,7 +65,7 @@ For this controller:
 
 namespace App\Http\Controllers;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class ContactController extends Controller
 {
@@ -110,7 +110,7 @@ This automatic URI generation helps maintain consistent URL structures across yo
 **Route attributes are required** for all controller methods that should generate routes. You can use specific HTTP method attributes to define routes. For example, you can define a route parameter like so:
 
 ```php
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 ...
 
@@ -196,7 +196,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->group('static', [
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\HandleInertiaRequests::class,
-            \HardImpact\CloudflareCache\Http\Middleware\CacheResponse::class,
+            \NckRtl\CloudflareCache\Http\Middleware\CacheResponse::class,
         ]);
     })
     ->create();
@@ -207,7 +207,7 @@ Define `static` however you like; for Cloudflare HTML caching it must **not** in
 #### Examples
 
 ```php
-use HardImpact\Waymaker\{Get, Post, Put, Delete};
+use NckRtl\Waymaker\{Get, Post, Put, Delete};
 
 class ArticleController extends Controller
 {
@@ -283,7 +283,7 @@ If you see a `RuntimeException` about duplicate routes:
 Make sure your `routes/web.php` (or appropriate routes file) includes:
 
 ```php
-use HardImpact\Waymaker\Facades\Waymaker;
+use NckRtl\Waymaker\Facades\Waymaker;
 
 Waymaker::routes();
 ```

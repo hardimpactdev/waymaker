@@ -1,7 +1,7 @@
 <?php
 
-use HardImpact\Waymaker\Tests\Traits\TestFixtures;
-use HardImpact\Waymaker\Waymaker;
+use NckRtl\Waymaker\Tests\Traits\TestFixtures;
+use NckRtl\Waymaker\Waymaker;
 
 uses(TestFixtures::class);
 
@@ -22,9 +22,9 @@ test('it applies route prefix to all routes including those with custom URIs', f
     $controllerContent = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class PrefixInspectionEntryController
 {
@@ -96,9 +96,9 @@ test('it handles leading slashes in URIs with route prefix correctly', function 
     $controllerContent = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class PrefixInspectionExportController
 {
@@ -165,9 +165,9 @@ test('it excludes constructor methods from route generation', function () {
     $controllerContent = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class TestConstructorController
 {

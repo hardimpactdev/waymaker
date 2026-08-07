@@ -1,7 +1,7 @@
 <?php
 
-use HardImpact\Waymaker\Tests\Traits\TestFixtures;
-use HardImpact\Waymaker\Waymaker;
+use NckRtl\Waymaker\Tests\Traits\TestFixtures;
+use NckRtl\Waymaker\Waymaker;
 use Illuminate\Support\Facades\File;
 
 uses(TestFixtures::class);
@@ -23,9 +23,9 @@ test('it discovers controllers in subdirectories', function () {
     $homeControllerContent = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class SubdirHomeController
 {
@@ -43,10 +43,10 @@ PHP;
     $loginControllerContent = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp\Auth;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp\Auth;
 
-use HardImpact\Waymaker\Get;
-use HardImpact\Waymaker\Post;
+use NckRtl\Waymaker\Get;
+use NckRtl\Waymaker\Post;
 
 class LoginController
 {
@@ -79,9 +79,9 @@ PHP;
     expect($routesString)->toContain('Auth\\LoginController');
 
     // Check specific routes (note: SubdirHomeController generates /home not / by default)
-    expect($routesString)->toContain("Route::get('/subdir-home', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\SubdirHomeController::class, 'index'])");
-    expect($routesString)->toContain("Route::get('/login', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\Auth\\LoginController::class, 'showLoginForm'])");
-    expect($routesString)->toContain("Route::post('/login', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\Auth\\LoginController::class, 'login'])");
+    expect($routesString)->toContain("Route::get('/subdir-home', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\SubdirHomeController::class, 'index'])");
+    expect($routesString)->toContain("Route::get('/login', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\Auth\\LoginController::class, 'showLoginForm'])");
+    expect($routesString)->toContain("Route::post('/login', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\Auth\\LoginController::class, 'login'])");
 });
 
 test('it generates correct fully qualified class names for controllers in subdirectories', function () {
@@ -93,10 +93,10 @@ test('it generates correct fully qualified class names for controllers in subdir
     $profileControllerContent = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp\Settings;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp\Settings;
 
-use HardImpact\Waymaker\Get;
-use HardImpact\Waymaker\Put;
+use NckRtl\Waymaker\Get;
+use NckRtl\Waymaker\Put;
 
 class SubdirProfileController
 {
@@ -131,7 +131,7 @@ PHP;
 
     foreach ($profileRoutes as $route) {
         // Check that the fully qualified class name includes the subdirectory
-        expect($route)->toContain('\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\Settings\\SubdirProfileController');
+        expect($route)->toContain('\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\Settings\\SubdirProfileController');
     }
 
     // Check that middleware is applied at the group level
@@ -148,9 +148,9 @@ test('it handles deeply nested controller directories', function () {
     $revenueControllerContent = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp\Admin\Reports\Financial;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp\Admin\Reports\Financial;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class SubdirRevenueController
 {

@@ -1,7 +1,7 @@
 <?php
 
-use HardImpact\Waymaker\Tests\Traits\TestFixtures;
-use HardImpact\Waymaker\Waymaker;
+use NckRtl\Waymaker\Tests\Traits\TestFixtures;
+use NckRtl\Waymaker\Waymaker;
 
 uses(TestFixtures::class);
 
@@ -22,9 +22,9 @@ test('it does not generate routes for methods without route attributes', functio
     $controllerContent = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class TestController
 {
@@ -86,7 +86,7 @@ PHP;
     expect($routeCount)->toBe(1);
 
     // Assert the index route exists
-    expect($routesString)->toContain("Route::get('/test', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\TestController::class, 'index']");
+    expect($routesString)->toContain("Route::get('/test', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\TestController::class, 'index']");
 
     // Assert other methods do not generate routes
     expect($routesString)->not->toContain('__construct');
@@ -104,9 +104,9 @@ test('it does not generate routes for constructors with dependency injection', f
     $controllerContent = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class AttrInspectionController
 {
@@ -157,6 +157,6 @@ PHP;
     expect($routesString)->not->toContain('__construct');
 
     // Assert the correct routes exist
-    expect($routesString)->toContain("Route::get('/attr-inspection', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\AttrInspectionController::class, 'index']");
-    expect($routesString)->toContain("Route::get('/attr-inspection/{id}', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\AttrInspectionController::class, 'show']");
+    expect($routesString)->toContain("Route::get('/attr-inspection', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\AttrInspectionController::class, 'index']");
+    expect($routesString)->toContain("Route::get('/attr-inspection/{id}', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\AttrInspectionController::class, 'show']");
 });

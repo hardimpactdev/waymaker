@@ -1,7 +1,7 @@
 <?php
 
-use HardImpact\Waymaker\Tests\Traits\TestFixtures;
-use HardImpact\Waymaker\Waymaker;
+use NckRtl\Waymaker\Tests\Traits\TestFixtures;
+use NckRtl\Waymaker\Waymaker;
 
 uses(TestFixtures::class);
 
@@ -18,10 +18,10 @@ test('it handles multiple methods with the same HTTP verb and URI', function () 
     $controllerContent = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
 use Illuminate\Routing\Controller;
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class TestDuplicateController extends Controller
 {
@@ -47,8 +47,8 @@ PHP;
     $routesString = implode("\n", $routes);
 
     // Check if methods generate routes with different URIs
-    expect($routesString)->toContain("Route::get('/test-duplicate', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\TestDuplicateController::class, 'index'])")
-        ->and($routesString)->toContain("Route::get('/test-duplicate/{id}', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\TestDuplicateController::class, 'show'])")
+    expect($routesString)->toContain("Route::get('/test-duplicate', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\TestDuplicateController::class, 'index'])")
+        ->and($routesString)->toContain("Route::get('/test-duplicate/{id}', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\TestDuplicateController::class, 'show'])")
         ->and($routesString)->toContain('TestDuplicateController.index')
         ->and($routesString)->toContain('TestDuplicateController.show');
 });

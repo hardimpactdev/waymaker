@@ -1,16 +1,16 @@
 <?php
 
-namespace HardImpact\Waymaker\Facades;
+namespace NckRtl\Waymaker\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \HardImpact\Waymaker\Waymaker
+ * @see \NckRtl\Waymaker\Waymaker
  */
 class Waymaker extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return \HardImpact\Waymaker\Waymaker::class;
+        return \NckRtl\Waymaker\Waymaker::class;
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace HardImpact\Waymaker\Tests\Traits;
+namespace NckRtl\Waymaker\Tests\Traits;
 
-use HardImpact\Waymaker\Waymaker;
+use NckRtl\Waymaker\Waymaker;
 use Illuminate\Support\Facades\File;
 use Symfony\Component\Finder\Finder;
 
@@ -44,8 +44,8 @@ trait TestFixtures
             $content = File::get($sourcePath);
             // Rewrite fixture namespace to the temp controller namespace
             $content = preg_replace(
-                '/namespace\s+HardImpact\\\\Waymaker\\\\Tests\\\\Fixtures\\\\Controllers\\\\[^;]+;/',
-                'namespace HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp;',
+                '/namespace\s+NckRtl\\\\Waymaker\\\\Tests\\\\Fixtures\\\\Controllers\\\\[^;]+;/',
+                'namespace NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp;',
                 $content
             );
             File::put($destPath, $content);
@@ -71,8 +71,8 @@ trait TestFixtures
             $content = File::get($file->getPathname());
             // Rewrite fixture namespace to the temp controller namespace
             $content = preg_replace(
-                '/namespace\s+HardImpact\\\\Waymaker\\\\Tests\\\\Fixtures\\\\Controllers\\\\[^;]+;/',
-                'namespace HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp;',
+                '/namespace\s+NckRtl\\\\Waymaker\\\\Tests\\\\Fixtures\\\\Controllers\\\\[^;]+;/',
+                'namespace NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp;',
                 $content
             );
             File::put($this->tempPath.'/'.basename($file), $content);
@@ -86,7 +86,7 @@ trait TestFixtures
     {
         Waymaker::setControllerPath(
             $this->tempPath,
-            'HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp'
+            'NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp'
         );
     }
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace HardImpact\Waymaker\Tests\Controllers;
+namespace NckRtl\Waymaker\Tests\Controllers;
 
-use HardImpact\Waymaker\Waymaker;
+use NckRtl\Waymaker\Waymaker;
 
 /**
  * This class serves as a registry for test controllers.
@@ -23,7 +23,7 @@ class TestControllerRegistry
         // Register the controller path
         Waymaker::setControllerPath(
             $path,
-            'HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp'
+            'NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp'
         );
     }
 

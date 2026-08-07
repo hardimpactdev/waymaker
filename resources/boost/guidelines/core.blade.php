@@ -27,7 +27,7 @@ composer require nckrtl/waymaker
 @verbatim
 <code-snippet name="Include generated routes" lang="php">
 // routes/web.php
-use HardImpact\Waymaker\Facades\Waymaker;
+use NckRtl\Waymaker\Facades\Waymaker;
 
 Waymaker::routes();
 </code-snippet>
@@ -83,9 +83,9 @@ All controller methods that should generate routes **must** have an explicit rou
 
 namespace App\Http\Controllers;
 
-use HardImpact\Waymaker\Get;
-use HardImpact\Waymaker\Post;
-use HardImpact\Waymaker\Delete;
+use NckRtl\Waymaker\Get;
+use NckRtl\Waymaker\Post;
+use NckRtl\Waymaker\Delete;
 
 class ContactController extends Controller
 {

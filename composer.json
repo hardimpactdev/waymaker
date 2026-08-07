@@ -38,13 +38,13 @@
     },
     "autoload": {
         "psr-4": {
-            "HardImpact\\Waymaker\\": "src/",
-            "HardImpact\\Waymaker\\Database\\Factories\\": "database/factories/"
+            "NckRtl\\Waymaker\\": "src/",
+            "NckRtl\\Waymaker\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "HardImpact\\Waymaker\\Tests\\": "tests/",
+            "NckRtl\\Waymaker\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
@@ -66,10 +66,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "HardImpact\\Waymaker\\WaymakerServiceProvider"
+                "NckRtl\\Waymaker\\WaymakerServiceProvider"
             ],
             "aliases": {
-                "Waymaker": "HardImpact\\Waymaker\\Facades\\Waymaker"
+                "Waymaker": "NckRtl\\Waymaker\\Facades\\Waymaker"
             }
         }
     },

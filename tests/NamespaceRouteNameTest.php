@@ -1,7 +1,7 @@
 <?php
 
-use HardImpact\Waymaker\Tests\Traits\TestFixtures;
-use HardImpact\Waymaker\Waymaker;
+use NckRtl\Waymaker\Tests\Traits\TestFixtures;
+use NckRtl\Waymaker\Waymaker;
 use Illuminate\Support\Facades\File;
 
 uses(TestFixtures::class);
@@ -23,9 +23,9 @@ it('generates route names with full namespace path for nested controllers', func
     $profileControllerContent = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp\Settings;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp\Settings;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class NsProfileController
 {
@@ -67,9 +67,9 @@ it('generates route names with deeply nested namespace paths', function () {
     $revenueControllerContent = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp\Admin\Reports\Financial;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp\Admin\Reports\Financial;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class NsRevenueController
 {

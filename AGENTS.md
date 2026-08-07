@@ -7,7 +7,7 @@ Guidance for AI coding agents working in the Waymaker repository.
 Waymaker is a Laravel package providing attribute-based route generation. It scans controller
 methods with PHP 8 attributes (`#[Get]`, `#[Post]`, etc.) and generates route definition files.
 
-- **Namespace:** `HardImpact\Waymaker` | **PHP:** 8.4+ | **Laravel:** 10, 11, 12
+- **Namespace:** `NckRtl\Waymaker` | **PHP:** 8.4+ | **Laravel:** 10, 11, 12
 
 ## Commands
 
@@ -62,8 +62,8 @@ if (! class_exists($class)) { continue; }  // Silent skip
 
 ```php
 <?php
-use HardImpact\Waymaker\Tests\Traits\TestFixtures;
-use HardImpact\Waymaker\Waymaker;
+use NckRtl\Waymaker\Tests\Traits\TestFixtures;
+use NckRtl\Waymaker\Waymaker;
 
 uses(TestFixtures::class);
 
@@ -77,8 +77,8 @@ afterEach(fn () => $this->tearDownFixtures());
 test('generates routes', function () {
     $controller = <<<'PHP'
     <?php
-    namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
-    use HardImpact\Waymaker\Get;
+    namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
+    use NckRtl\Waymaker\Get;
     class TestController {
         #[Get]
         public function index() {}

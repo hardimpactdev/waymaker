@@ -1,6 +1,6 @@
 <?php
 
-namespace HardImpact\Waymaker\Enums;
+namespace NckRtl\Waymaker\Enums;
 
 enum HttpMethod: string
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace HardImpact\Waymaker\Tests\Traits;
+namespace NckRtl\Waymaker\Tests\Traits;
 
-use HardImpact\Waymaker\Waymaker;
+use NckRtl\Waymaker\Waymaker;
 
 trait RouteAssertions
 {
@@ -11,7 +11,7 @@ trait RouteAssertions
      */
     protected function getTestNamespace(): string
     {
-        return 'HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp';
+        return 'NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp';
     }
 
     /**

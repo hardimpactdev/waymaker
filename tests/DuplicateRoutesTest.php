@@ -1,7 +1,7 @@
 <?php
 
-use HardImpact\Waymaker\Tests\Traits\TestFixtures;
-use HardImpact\Waymaker\Waymaker;
+use NckRtl\Waymaker\Tests\Traits\TestFixtures;
+use NckRtl\Waymaker\Waymaker;
 
 uses(TestFixtures::class);
 
@@ -22,9 +22,9 @@ test('it prevents duplicate route definitions for the same URI and HTTP method',
     $controller1 = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class DupInspectionEntryController
 {
@@ -42,9 +42,9 @@ PHP;
     $controller2 = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class DupInspectionEntryListController
 {
@@ -78,11 +78,11 @@ test('it allows different HTTP methods on the same URI', function () {
     $controller = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
-use HardImpact\Waymaker\Post;
-use HardImpact\Waymaker\Delete;
+use NckRtl\Waymaker\Get;
+use NckRtl\Waymaker\Post;
+use NckRtl\Waymaker\Delete;
 
 class DupResourceController
 {

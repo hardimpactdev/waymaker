@@ -1,7 +1,7 @@
 <?php
 
-use HardImpact\Waymaker\Tests\Traits\TestFixtures;
-use HardImpact\Waymaker\Waymaker;
+use NckRtl\Waymaker\Tests\Traits\TestFixtures;
+use NckRtl\Waymaker\Waymaker;
 
 uses(TestFixtures::class);
 
@@ -17,9 +17,9 @@ afterEach(function () {
 test('generates root route for invokable controller without prefix', function () {
     $controller = <<<'PHP'
 <?php
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class InvokableHomeController
 {
@@ -34,16 +34,16 @@ PHP;
 
     $routes = Waymaker::generateRouteDefinitions();
 
-    $expectedRoute = "Route::get('/', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\InvokableHomeController::class, '__invoke'])->name('InvokableHomeController');";
+    $expectedRoute = "Route::get('/', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\InvokableHomeController::class, '__invoke'])->name('InvokableHomeController');";
     expect($routes)->toContain($expectedRoute);
 });
 
 test('generates prefixed route for invokable controller', function () {
     $controller = <<<'PHP'
 <?php
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class ContactController
 {
@@ -63,7 +63,7 @@ PHP;
 
     // Should be in a group with prefix
     $expectedGroupStart = "Route::prefix('contact')->middleware('guest')->group(function (): void {";
-    $expectedRoute = "    Route::get('contact', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\ContactController::class, '__invoke'])->name('ContactController');";
+    $expectedRoute = "    Route::get('contact', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\ContactController::class, '__invoke'])->name('ContactController');";
 
     expect($routes)->toContain($expectedGroupStart);
     expect($routes)->toContain($expectedRoute);
@@ -72,9 +72,9 @@ PHP;
 test('generates custom URI route for invokable controller', function () {
     $controller = <<<'PHP'
 <?php
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class AboutController
 {
@@ -89,16 +89,16 @@ PHP;
 
     $routes = Waymaker::generateRouteDefinitions();
 
-    $expectedRoute = "Route::get('about-us', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\AboutController::class, '__invoke'])->name('AboutController');";
+    $expectedRoute = "Route::get('about-us', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\AboutController::class, '__invoke'])->name('AboutController');";
     expect($routes)->toContain($expectedRoute);
 });
 
 test('invokable controller route name excludes __invoke suffix', function () {
     $controller = <<<'PHP'
 <?php
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class TestInvokableController
 {
@@ -122,9 +122,9 @@ PHP;
 test('invokable controller with custom route name', function () {
     $controller = <<<'PHP'
 <?php
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class CustomNameController
 {
@@ -139,16 +139,16 @@ PHP;
 
     $routes = Waymaker::generateRouteDefinitions();
 
-    $expectedRoute = "Route::get('/', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\CustomNameController::class, '__invoke'])->name('custom.route.name');";
+    $expectedRoute = "Route::get('/', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\CustomNameController::class, '__invoke'])->name('custom.route.name');";
     expect($routes)->toContain($expectedRoute);
 });
 
 test('invokable controller with parameters', function () {
     $controller = <<<'PHP'
 <?php
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class ShowItemController
 {
@@ -163,16 +163,16 @@ PHP;
 
     $routes = Waymaker::generateRouteDefinitions();
 
-    $expectedRoute = "Route::get('{id}', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\ShowItemController::class, '__invoke'])->name('ShowItemController');";
+    $expectedRoute = "Route::get('{id}', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\ShowItemController::class, '__invoke'])->name('ShowItemController');";
     expect($routes)->toContain($expectedRoute);
 });
 
 test('invokable controller with prefix and custom URI', function () {
     $controller = <<<'PHP'
 <?php
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class PrefixedCustomController
 {
@@ -192,7 +192,7 @@ PHP;
     // When both prefix and custom URI are set, it creates a group with prefix
     // and the route uses the custom URI
     $expectedGroupStart = "Route::prefix('admin')->group(function (): void {";
-    $expectedRoute = "    Route::get('custom-path', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\PrefixedCustomController::class, '__invoke'])->name('PrefixedCustomController');";
+    $expectedRoute = "    Route::get('custom-path', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\PrefixedCustomController::class, '__invoke'])->name('PrefixedCustomController');";
 
     expect($routes)->toContain($expectedGroupStart);
     expect($routes)->toContain($expectedRoute);
@@ -201,9 +201,9 @@ PHP;
 test('invokable controller with middleware attribute', function () {
     $controller = <<<'PHP'
 <?php
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class ProtectedController
 {
@@ -218,16 +218,16 @@ PHP;
 
     $routes = Waymaker::generateRouteDefinitions();
 
-    $expectedRoute = "Route::get('/', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\ProtectedController::class, '__invoke'])->name('ProtectedController')->middleware('auth');";
+    $expectedRoute = "Route::get('/', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\ProtectedController::class, '__invoke'])->name('ProtectedController')->middleware('auth');";
     expect($routes)->toContain($expectedRoute);
 });
 
 test('invokable controller with root URI', function () {
     $controller = <<<'PHP'
 <?php
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class RootController
 {
@@ -242,7 +242,7 @@ PHP;
 
     $routes = Waymaker::generateRouteDefinitions();
 
-    $expectedRoute = "Route::get('/', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\RootController::class, '__invoke'])->name('RootController');";
+    $expectedRoute = "Route::get('/', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\RootController::class, '__invoke'])->name('RootController');";
     expect($routes)->toContain($expectedRoute);
 });
 
@@ -255,9 +255,9 @@ test('namespaced invokable controller generates correct route name', function ()
 
     $controller = <<<'PHP'
 <?php
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp\Admin;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp\Admin;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class InvokableDashboardController
 {
@@ -275,7 +275,7 @@ PHP;
     $routes = Waymaker::generateRouteDefinitions();
 
     $expectedGroupStart = "Route::prefix('dashboard')->group(function (): void {";
-    $expectedRoute = "    Route::get('dashboard', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\Admin\\InvokableDashboardController::class, '__invoke'])->name('Admin.InvokableDashboardController');";
+    $expectedRoute = "    Route::get('dashboard', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\Admin\\InvokableDashboardController::class, '__invoke'])->name('Admin.InvokableDashboardController');";
 
     expect($routes)->toContain($expectedGroupStart);
     expect($routes)->toContain($expectedRoute);
@@ -284,9 +284,9 @@ PHP;
 test('invokable controller uses different HTTP methods', function () {
     $getController = <<<'PHP'
 <?php
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class GetInvokableController
 {
@@ -301,9 +301,9 @@ PHP;
 
     $postController = <<<'PHP'
 <?php
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Post;
+use NckRtl\Waymaker\Post;
 
 class PostInvokableController
 {
@@ -318,17 +318,17 @@ PHP;
 
     $routes = Waymaker::generateRouteDefinitions();
 
-    expect($routes)->toContain("Route::get('/', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\GetInvokableController::class, '__invoke'])->name('GetInvokableController');");
-    expect($routes)->toContain("Route::post('/', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\PostInvokableController::class, '__invoke'])->name('PostInvokableController');");
+    expect($routes)->toContain("Route::get('/', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\GetInvokableController::class, '__invoke'])->name('GetInvokableController');");
+    expect($routes)->toContain("Route::post('/', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\PostInvokableController::class, '__invoke'])->name('PostInvokableController');");
 });
 
 test('regular controllers still work alongside invokable controllers', function () {
     // Create an invokable controller
     $invokableController = <<<'PHP'
 <?php
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class SimpleInvokableController
 {
@@ -344,9 +344,9 @@ PHP;
     // Create a regular controller with multiple methods
     $regularController = <<<'PHP'
 <?php
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class RegularController
 {
@@ -370,10 +370,10 @@ PHP;
     $routes = Waymaker::generateRouteDefinitions();
 
     // Invokable should be root route
-    expect($routes)->toContain("Route::get('/', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\SimpleInvokableController::class, '__invoke'])->name('SimpleInvokableController');");
+    expect($routes)->toContain("Route::get('/', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\SimpleInvokableController::class, '__invoke'])->name('SimpleInvokableController');");
 
     // Regular controller should be grouped
     expect($routes)->toContain("Route::prefix('regular')->group(function (): void {");
-    expect($routes)->toContain("    Route::get('', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\RegularController::class, 'index'])->name('RegularController.index');");
-    expect($routes)->toContain("    Route::get('{id}', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\RegularController::class, 'show'])->name('RegularController.show');");
+    expect($routes)->toContain("    Route::get('', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\RegularController::class, 'index'])->name('RegularController.index');");
+    expect($routes)->toContain("    Route::get('{id}', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\RegularController::class, 'show'])->name('RegularController.show');");
 });

@@ -1,7 +1,7 @@
 <?php
 
-use HardImpact\Waymaker\Tests\Traits\TestFixtures;
-use HardImpact\Waymaker\Waymaker;
+use NckRtl\Waymaker\Tests\Traits\TestFixtures;
+use NckRtl\Waymaker\Waymaker;
 
 uses(TestFixtures::class);
 
@@ -22,10 +22,10 @@ test('it generates routes with prefix and middleware grouping', function () {
     $controller1 = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
-use HardImpact\Waymaker\Post;
+use NckRtl\Waymaker\Get;
+use NckRtl\Waymaker\Post;
 
 class GroupInspectionEntryController
 {
@@ -67,9 +67,9 @@ PHP;
     $controller2 = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class GroupInspectionExportController
 {
@@ -97,12 +97,12 @@ PHP;
     expect($routesString)->toContain("Route::prefix('inspections')->middleware(['auth', 'active'])->group(function (): void {");
 
     // Check that routes within group don't have leading slashes or repeated middleware
-    expect($routesString)->toContain("Route::get('', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\GroupInspectionEntryController::class, 'index'])->name('GroupInspectionEntryController.index');");
-    expect($routesString)->toContain("Route::post('', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\GroupInspectionEntryController::class, 'store'])->name('GroupInspectionEntryController.store');");
-    expect($routesString)->toContain("Route::get('create', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\GroupInspectionEntryController::class, 'create'])->name('GroupInspectionEntryController.create');");
-    expect($routesString)->toContain("Route::get('export', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\GroupInspectionExportController::class, 'export'])->name('GroupInspectionExportController.export');");
-    expect($routesString)->toContain("Route::get('{inspection_entry}', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\GroupInspectionEntryController::class, 'show'])->name('GroupInspectionEntryController.show');");
-    expect($routesString)->toContain("Route::get('{inspection_entry}/pdf', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\GroupInspectionEntryController::class, 'pdf'])->name('GroupInspectionEntryController.pdf');");
+    expect($routesString)->toContain("Route::get('', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\GroupInspectionEntryController::class, 'index'])->name('GroupInspectionEntryController.index');");
+    expect($routesString)->toContain("Route::post('', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\GroupInspectionEntryController::class, 'store'])->name('GroupInspectionEntryController.store');");
+    expect($routesString)->toContain("Route::get('create', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\GroupInspectionEntryController::class, 'create'])->name('GroupInspectionEntryController.create');");
+    expect($routesString)->toContain("Route::get('export', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\GroupInspectionExportController::class, 'export'])->name('GroupInspectionExportController.export');");
+    expect($routesString)->toContain("Route::get('{inspection_entry}', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\GroupInspectionEntryController::class, 'show'])->name('GroupInspectionEntryController.show');");
+    expect($routesString)->toContain("Route::get('{inspection_entry}/pdf', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\GroupInspectionEntryController::class, 'pdf'])->name('GroupInspectionEntryController.pdf');");
 
     // Check closing of group
     expect($routesString)->toContain('});');
@@ -119,9 +119,9 @@ test('it handles mixed middleware scenarios correctly', function () {
     $controller1 = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class AdminController
 {
@@ -146,9 +146,9 @@ PHP;
     $controller2 = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
+use NckRtl\Waymaker\Get;
 
 class GroupPublicController
 {
@@ -180,11 +180,11 @@ PHP;
     expect($routesString)->toContain("Route::prefix('admin')->middleware(['auth', 'admin'])->group(function (): void {");
 
     // Route with additional middleware should have it appended
-    expect($routesString)->toContain("Route::get('users', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\AdminController::class, 'users'])->name('AdminController.users')->middleware('can:manage-users');");
+    expect($routesString)->toContain("Route::get('users', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\AdminController::class, 'users'])->name('AdminController.users')->middleware('can:manage-users');");
 
     // Public routes without middleware should not have a middleware group
-    expect($routesString)->toContain("Route::get('/', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\GroupPublicController::class, 'home'])->name('GroupPublicController.home');");
-    expect($routesString)->toContain("Route::get('/group-public/about', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\GroupPublicController::class, 'about'])->name('GroupPublicController.about');");
+    expect($routesString)->toContain("Route::get('/', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\GroupPublicController::class, 'home'])->name('GroupPublicController.home');");
+    expect($routesString)->toContain("Route::get('/group-public/about', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\GroupPublicController::class, 'about'])->name('GroupPublicController.about');");
 });
 
 /**
@@ -194,10 +194,10 @@ test('it handles routes without prefix but with middleware', function () {
     $controller = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
-use HardImpact\Waymaker\Get;
-use HardImpact\Waymaker\Post;
+use NckRtl\Waymaker\Get;
+use NckRtl\Waymaker\Post;
 
 class AuthController
 {
@@ -228,6 +228,6 @@ PHP;
 
     // Should create a middleware-only group (formatMiddleware returns 'guest' for single item)
     expect($routesString)->toContain("Route::middleware('guest')->group(function (): void {");
-    expect($routesString)->toContain("Route::get('/auth/login', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\AuthController::class, 'showLogin'])->name('AuthController.showLogin');");
-    expect($routesString)->toContain("Route::post('/auth/login', [\\HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp\\AuthController::class, 'login'])->name('AuthController.login');");
+    expect($routesString)->toContain("Route::get('/auth/login', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\AuthController::class, 'showLogin'])->name('AuthController.showLogin');");
+    expect($routesString)->toContain("Route::post('/auth/login', [\\NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp\\AuthController::class, 'login'])->name('AuthController.login');");
 });

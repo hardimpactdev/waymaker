@@ -1,7 +1,7 @@
 <?php
 
-use HardImpact\Waymaker\Tests\Traits\TestFixtures;
-use HardImpact\Waymaker\Waymaker;
+use NckRtl\Waymaker\Tests\Traits\TestFixtures;
+use NckRtl\Waymaker\Waymaker;
 
 uses(TestFixtures::class);
 
@@ -12,13 +12,13 @@ beforeEach(function () {
     $multiMethodControllerContent = <<<'PHP'
 <?php
 
-namespace HardImpact\Waymaker\Tests\Http\Controllers\temp;
+namespace NckRtl\Waymaker\Tests\Http\Controllers\temp;
 
 use Illuminate\Routing\Controller;
 use Inertia\Response;
-use HardImpact\Waymaker\Get;
-use HardImpact\Waymaker\Post;
-use HardImpact\Waymaker\Enums\HttpMethod;
+use NckRtl\Waymaker\Get;
+use NckRtl\Waymaker\Post;
+use NckRtl\Waymaker\Enums\HttpMethod;
 
 class MultiMethodController extends Controller
 {
@@ -54,7 +54,7 @@ PHP;
     file_put_contents($this->tempPath.'/MultiMethodController.php', $multiMethodControllerContent);
 
     // Set up Waymaker to use our temp path
-    Waymaker::setControllerPath($this->tempPath, 'HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp');
+    Waymaker::setControllerPath($this->tempPath, 'NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp');
 });
 
 afterEach(function () {
@@ -69,7 +69,7 @@ test('it generates routes for controllers with multiple methods', function () {
     $routes = Waymaker::generateRouteDefinitions();
 
     // Build the expected route definitions
-    $namespace = 'HardImpact\\Waymaker\\Tests\\Http\\Controllers\\temp';
+    $namespace = 'NckRtl\\Waymaker\\Tests\\Http\\Controllers\\temp';
 
     $expectedRoutes = [
         // Route definitions

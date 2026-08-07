@@ -1,5 +1,5 @@
 <?php
 
-use HardImpact\Waymaker\Tests\TestCase;
+use NckRtl\Waymaker\Tests\TestCase;
 
 uses(TestCase::class)->in(__DIR__);

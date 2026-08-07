@@ -1,9 +1,9 @@
 <?php
 
-namespace HardImpact\Waymaker;
+namespace NckRtl\Waymaker;
 
 use Attribute;
-use HardImpact\Waymaker\Enums\HttpMethod;
+use NckRtl\Waymaker\Enums\HttpMethod;
 
 #[Attribute]
 class Delete extends RouteAttribute

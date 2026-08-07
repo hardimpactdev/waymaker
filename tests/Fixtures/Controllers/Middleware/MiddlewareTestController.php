@@ -1,10 +1,10 @@
 <?php
 
-namespace HardImpact\Waymaker\Tests\Fixtures\Controllers\Middleware;
+namespace NckRtl\Waymaker\Tests\Fixtures\Controllers\Middleware;
 
-use HardImpact\Waymaker\Get;
-use HardImpact\Waymaker\Post;
-use HardImpact\Waymaker\Put;
+use NckRtl\Waymaker\Get;
+use NckRtl\Waymaker\Post;
+use NckRtl\Waymaker\Put;
 use Illuminate\Routing\Controller;
 use Inertia\Response;
 
