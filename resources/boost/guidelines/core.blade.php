@@ -16,7 +16,7 @@ Automatic route generation from controller method attributes. Define routes dire
 
 @verbatim
 <code-snippet name="Install Waymaker" lang="bash">
-composer require hardimpactdev/waymaker
+composer require nckrtl/waymaker
 </code-snippet>
 @endverbatim
 

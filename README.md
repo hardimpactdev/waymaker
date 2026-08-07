@@ -7,7 +7,7 @@ This Laravel packages lets you generate a routes file based on your public contr
 You can install the package via composer:
 
 ```bash
-composer require hardimpactdev/waymaker
+composer require nckrtl/waymaker
 ```
 
 ## Requirements

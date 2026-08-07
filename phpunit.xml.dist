@@ -16,7 +16,7 @@
     backupStaticProperties="false"
 >
     <testsuites>
-        <testsuite name="HardImpact Test Suite">
+        <testsuite name="Waymaker Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>

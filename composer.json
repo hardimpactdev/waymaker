@@ -1,5 +1,5 @@
 {
-    "name": "hardimpactdev/waymaker",
+    "name": "nckrtl/waymaker",
     "description": "Attribute-based route generation for Laravel - automatically generate routes from controller method attributes",
     "keywords": [
         "laravel",
@@ -9,12 +9,12 @@
         "inertia",
         "wayfinder"
     ],
-    "homepage": "https://github.com/hardimpactdev/waymaker",
+    "homepage": "https://github.com/nckrtl/waymaker",
     "license": "MIT",
     "authors": [
         {
-            "name": "HardImpact",
-            "email": "dev@hardimpact.com",
+            "name": "nckrtl",
+            "email": "nick.retel@gmail.com",
             "role": "Developer"
         }
     ],
