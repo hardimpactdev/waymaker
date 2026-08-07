@@ -2,8 +2,8 @@
 
 namespace NckRtl\Waymaker\Tests;
 
-use NckRtl\Waymaker\WaymakerServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use NckRtl\Waymaker\WaymakerServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra

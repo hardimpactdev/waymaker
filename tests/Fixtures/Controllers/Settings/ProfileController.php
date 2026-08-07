@@ -2,9 +2,9 @@
 
 namespace Tests\Fixtures\Controllers\Settings;
 
-use NckRtl\Waymaker\Get;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use NckRtl\Waymaker\Get;
 
 class ProfileController
 {

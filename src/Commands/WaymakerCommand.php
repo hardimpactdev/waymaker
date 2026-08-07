@@ -2,9 +2,9 @@
 
 namespace NckRtl\Waymaker\Commands;
 
-use NckRtl\Waymaker\Waymaker;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use NckRtl\Waymaker\Waymaker;
 
 class WaymakerCommand extends Command
 {

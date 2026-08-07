@@ -2,11 +2,11 @@
 
 namespace NckRtl\Waymaker\Tests\Fixtures\Controllers\Middleware;
 
+use Illuminate\Routing\Controller;
+use Inertia\Response;
 use NckRtl\Waymaker\Get;
 use NckRtl\Waymaker\Post;
 use NckRtl\Waymaker\Put;
-use Illuminate\Routing\Controller;
-use Inertia\Response;
 
 class MiddlewareTestController extends Controller
 {

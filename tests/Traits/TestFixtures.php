@@ -2,8 +2,8 @@
 
 namespace NckRtl\Waymaker\Tests\Traits;
 
-use NckRtl\Waymaker\Waymaker;
 use Illuminate\Support\Facades\File;
+use NckRtl\Waymaker\Waymaker;
 use Symfony\Component\Finder\Finder;
 
 trait TestFixtures

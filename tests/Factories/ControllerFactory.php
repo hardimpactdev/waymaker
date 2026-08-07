@@ -2,8 +2,8 @@
 
 namespace NckRtl\Waymaker\Tests\Factories;
 
-use NckRtl\Waymaker\Enums\HttpMethod;
 use Illuminate\Support\Facades\File;
+use NckRtl\Waymaker\Enums\HttpMethod;
 
 class ControllerFactory
 {

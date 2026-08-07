@@ -2,13 +2,13 @@
 
 namespace NckRtl\Waymaker\Tests\Fixtures\Controllers\RouteGeneration;
 
+use Illuminate\Routing\Controller;
+use Inertia\Response;
 use NckRtl\Waymaker\Delete;
 use NckRtl\Waymaker\Get;
 use NckRtl\Waymaker\Patch;
 use NckRtl\Waymaker\Post;
 use NckRtl\Waymaker\Put;
-use Illuminate\Routing\Controller;
-use Inertia\Response;
 
 class ArticleController extends Controller
 {

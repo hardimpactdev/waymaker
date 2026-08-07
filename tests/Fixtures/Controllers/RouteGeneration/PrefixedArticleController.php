@@ -2,9 +2,9 @@
 
 namespace NckRtl\Waymaker\Tests\Fixtures\Controllers\RouteGeneration;
 
-use NckRtl\Waymaker\Get;
 use Illuminate\Routing\Controller;
 use Inertia\Response;
+use NckRtl\Waymaker\Get;
 
 class PrefixedArticleController extends Controller
 {

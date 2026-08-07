@@ -1,7 +1,7 @@
 <?php
 
-use NckRtl\Waymaker\Tests\Traits\TestFixtures;
 use Illuminate\Support\Facades\File;
+use NckRtl\Waymaker\Tests\Traits\TestFixtures;
 
 uses(TestFixtures::class);
 
